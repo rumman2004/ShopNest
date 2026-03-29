@@ -42,7 +42,7 @@ export default function AnimatedSection({
   className = '',
   as        = 'div',
   threshold = 0.15,
-  withBlur  = true, // Adds a modern blur-reveal effect by default
+  withBlur  = false, // Disabled by default for performance
 }) {
   const [ref, isVisible] = useScrollAnimation({ threshold })
   const Tag = as

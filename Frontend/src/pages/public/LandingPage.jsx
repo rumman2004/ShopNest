@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo, memo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Store, BarChart3, Users, Shield, Zap, Globe,
@@ -139,14 +139,21 @@ const footerLinks = [
 ]
 
 /* ─── Scroll Progress Bar ───────────────────────────────────────── */
-function ScrollProgressBar() {
+const ScrollProgressBar = memo(function ScrollProgressBar() {
   const [progress, setProgress] = useState(0)
+  const ticking = useRef(false)
 
   useEffect(() => {
     const onScroll = () => {
-      const doc   = document.documentElement
-      const total = doc.scrollHeight - doc.clientHeight
-      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0)
+      if (!ticking.current) {
+        ticking.current = true
+        requestAnimationFrame(() => {
+          const doc   = document.documentElement
+          const total = doc.scrollHeight - doc.clientHeight
+          setProgress(total > 0 ? (window.scrollY / total) * 100 : 0)
+          ticking.current = false
+        })
+      }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -156,14 +163,14 @@ function ScrollProgressBar() {
     <div className="fixed top-0 left-0 right-0 z-[100] h-[3px] bg-transparent">
       <div
         className="h-full bg-gradient-to-r from-[#235347] via-[#8EB69B] to-[#DAF1DE] transition-all duration-150"
-        style={{ width: `${progress}%` }}
+        style={{ width: `${progress}%`, willChange: 'width' }}
       />
     </div>
   )
-}
+})
 
 /* ─── Floating Nav Dot ──────────────────────────────────────────── */
-function NavDot({ label, target }) {
+const NavDot = memo(function NavDot({ label, target }) {
   const scrollTo = () => document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' })
   return (
     <button onClick={scrollTo} title={label} className="group relative flex items-center justify-end gap-2">
@@ -179,12 +186,12 @@ function NavDot({ label, target }) {
       <span className="w-2 h-2 rounded-full bg-[#8EB69B]/40 hover:bg-[#DAF1DE] group-hover:scale-125 transition-all duration-200 border border-[#8EB69B]/70" />
     </button>
   )
-}
+})
 
 /* ─── Dashboard Mockup ──────────────────────────────────────────── */
-function DashboardMockup() {
+const DashboardMockup = memo(function DashboardMockup() {
   const [ref, isVisible] = useScrollAnimation({ threshold: 0.2 })
-  const bars = [65, 42, 88, 55, 72, 95, 38, 80, 60, 45, 90, 70]
+  const bars = useMemo(() => [65, 42, 88, 55, 72, 95, 38, 80, 60, 45, 90, 70], [])
 
   return (
     <div
@@ -193,11 +200,12 @@ function DashboardMockup() {
         opacity:    isVisible ? 1 : 0,
         transform:  isVisible ? 'translateY(0) scale(1)' : 'translateY(60px) scale(0.96)',
         transition: 'opacity 900ms cubic-bezier(0.25,0.46,0.45,0.94) 200ms, transform 900ms cubic-bezier(0.25,0.46,0.45,0.94) 200ms',
+        willChange: isVisible ? 'auto' : 'opacity, transform',
       }}
       className="relative mt-20 max-w-5xl mx-auto"
     >
-      {/* Outer glow */}
-      <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8EB69B]/30 via-[#235347]/25 to-[#051F20]/40 blur-xl" />
+      {/* Outer glow - simplified for performance */}
+      <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#8EB69B]/20 via-[#235347]/15 to-[#051F20]/25" />
 
       {/* Window chrome */}
       <div className="relative glass-strong rounded-2xl overflow-hidden border border-[#8EB69B]/35">
@@ -386,10 +394,10 @@ function DashboardMockup() {
       </div>
     </div>
   )
-}
+})
 
 /* ─── POS Mockup ────────────────────────────────────────────────── */
-function PosMockup() {
+const PosMockup = memo(function PosMockup() {
   const [ref, isVisible] = useScrollAnimation({ threshold: 0.2 })
   const [activeItem, setActiveItem] = useState(null)
 
@@ -406,6 +414,7 @@ function PosMockup() {
         opacity:    isVisible ? 1 : 0,
         transform:  isVisible ? 'translateY(0)' : 'translateY(40px)',
         transition: 'opacity 800ms ease 300ms, transform 800ms ease 300ms',
+        willChange: isVisible ? 'auto' : 'opacity, transform',
       }}
       className="glass-strong rounded-2xl overflow-hidden border border-[#8EB69B]/35 max-w-lg mx-auto lg:mx-0"
     >
@@ -488,10 +497,10 @@ function PosMockup() {
       </div>
     </div>
   )
-}
+})
 
 /* ─── Navbar ────────────────────────────────────────────────────── */
-function Navbar({ scrolled }) {
+const Navbar = memo(function Navbar({ scrolled }) {
   return (
     <nav
       className={`
@@ -542,7 +551,7 @@ function Navbar({ scrolled }) {
       </div>
     </nav>
   )
-}
+})
 
 /* ─── Main Component ────────────────────────────────────────────── */
 export default function LandingPage() {
@@ -898,9 +907,8 @@ export default function LandingPage() {
         <AnimatedSection variant="zoom-in" delay={80}>
           <div className="relative rounded-3xl overflow-hidden mb-16 border border-[#8EB69B]/40 shadow-[0_0_40px_rgba(35,83,71,0.45)]">
             <div className="absolute inset-0 bg-gradient-to-br from-[#235347]/50 via-[#051F20]/60 to-[#163832]/40" />
-            <div className="absolute inset-0 backdrop-blur-2xl" />
-            <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#8EB69B]/20 blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[#DAF1DE]/15 blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#8EB69B]/12 pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[#DAF1DE]/8 pointer-events-none" />
 
             <div className="relative px-8 md:px-16 py-14 md:py-20">
               <AnimatedSection variant="fade-up" delay={150} className="flex justify-center mb-6">
@@ -1057,9 +1065,8 @@ export default function LandingPage() {
         <AnimatedSection variant="zoom-in">
           <div className="relative rounded-3xl overflow-hidden border border-[#8EB69B]/40 shadow-[0_0_45px_rgba(35,83,71,0.5)]">
             <div className="absolute inset-0 bg-gradient-to-br from-[#235347]/55 via-[#051F20]/70 to-[#8EB69B]/25" />
-            <div className="absolute inset-0 backdrop-blur-xl" />
-            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#8EB69B]/25 blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-[#DAF1DE]/15 blur-3xl pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#8EB69B]/15 pointer-events-none" />
+            <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-[#DAF1DE]/10 pointer-events-none" />
 
             <div className="relative px-8 py-16 text-center">
               <AnimatedSection variant="fade-up">
