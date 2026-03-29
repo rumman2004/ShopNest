@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 
 export default function Typewriter({
   words     = [],
-  speed     = 200,
-  deleteSpeed = 50,
-  pauseMs   = 800,
+  speed     = 100,
+  deleteSpeed = 60,
+  pauseMs   = 1800,
   className = '',
 }) {
   const [displayed, setDisplayed] = useState('')
