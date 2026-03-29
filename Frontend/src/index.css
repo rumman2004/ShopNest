@@ -1,0 +1,373 @@
+@import "tailwindcss";
+
+/* ── CSS Custom Properties (FOREST GREEN PALETTE) ──────────── */
+:root {
+    /* Main Theme Colors */
+    --theme-darkest: #051F20;
+    /* Rich Black Green  */
+    --theme-darker: #0B2B26;
+    /* Deep Forest       */
+    --theme-dark: #163832;
+    /* Forest Green      */
+    --theme-mid: #235347;
+    /* Medium Forest     */
+    --theme-light: #8EB69B;
+    /* Sage Green        */
+    --theme-lightest: #DAF1DE;
+    /* Mint / Near-White */
+
+    /* Backgrounds */
+    --bg-primary: var(--theme-darkest);
+    --bg-secondary: rgba(11, 43, 38, 0.55);
+    --bg-card: rgba(22, 56, 50, 0.22);
+
+    /* Borders & Shadows */
+    --border-glass: rgba(142, 182, 155, 0.22);
+    --border-glass-strong: rgba(142, 182, 155, 0.42);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.60);
+    --shadow-glass-lg: 0 20px 60px rgba(0, 0, 0, 0.78);
+
+    /* Glows */
+    --glow-blue: rgba(142, 182, 155, 0.50);
+    --glow-purple: rgba(35, 83, 71, 0.55);
+    --glow-green: rgba(218, 241, 222, 0.55);
+
+    /* Typography */
+    --text-primary: var(--theme-lightest);
+    --text-secondary: var(--theme-light);
+    --text-muted: var(--theme-dark);
+
+    /* Semantic accents */
+    --accent-sage: var(--theme-light);
+    --accent-forest: var(--theme-mid);
+    --accent-mint: var(--theme-lightest);
+    --accent-green: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-red: #ef4444;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-primary);
+    background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(142, 182, 155, 0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(35, 83, 71, 0.26) 0%, transparent 60%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(142, 182, 155, 0.25);
+    border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(142, 182, 155, 0.45);
+}
+
+::selection {
+    background: rgba(142, 182, 155, 0.40);
+    color: var(--theme-darkest);
+}
+
+:focus-visible {
+    outline: 2px solid rgba(142, 182, 155, 0.70);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ── Glassmorphism Components ──────────────────────────────── */
+.glass {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-glass),
+        inset 0 1px 0 rgba(218, 241, 222, 0.05);
+}
+
+.glass-sm {
+    background: rgba(11, 43, 38, 0.38);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(142, 182, 155, 0.30);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.52);
+}
+
+.glass-strong {
+    background: rgba(22, 56, 50, 0.55);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid var(--border-glass-strong);
+    box-shadow: var(--shadow-glass-lg),
+        inset 0 1px 0 rgba(218, 241, 222, 0.10);
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-glass),
+        inset 0 1px 0 rgba(218, 241, 222, 0.06);
+    border-radius: 16px;
+    transition: all 0.25s ease;
+}
+
+.glass-card:hover {
+    background: rgba(35, 83, 71, 0.40);
+    border-color: rgba(142, 182, 155, 0.42);
+    box-shadow: var(--shadow-glass-lg),
+        inset 0 1px 0 rgba(218, 241, 222, 0.12);
+    transform: translateY(-2px);
+}
+
+/* ── Liquid Glass Background Blobs ────────────────────────── */
+.liquid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.liquid-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.48;
+    animation: liquidMove 12s ease-in-out infinite;
+}
+
+.liquid-blob-1 {
+    width: 700px;
+    height: 700px;
+    top: -200px;
+    left: -200px;
+    background: radial-gradient(circle, rgba(142, 182, 155, 0.28) 0%, transparent 70%);
+    animation-delay: 0s;
+}
+
+.liquid-blob-2 {
+    width: 600px;
+    height: 600px;
+    top: 30%;
+    right: -200px;
+    background: radial-gradient(circle, rgba(35, 83, 71, 0.34) 0%, transparent 70%);
+    animation-delay: -4s;
+}
+
+.liquid-blob-3 {
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    left: 25%;
+    background: radial-gradient(circle, rgba(218, 241, 222, 0.18) 0%, transparent 70%);
+    animation-delay: -8s;
+}
+
+@keyframes liquidMove {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+
+    33% {
+        transform: translate(40px, -30px) scale(1.05);
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+
+    66% {
+        transform: translate(-30px, 20px) scale(0.95);
+        border-radius: 50% 40% 60% 30% / 40% 70% 30% 60%;
+    }
+}
+
+/* ── Gradient Text ─────────────────────────────────────────── */
+.gradient-text {
+    background: linear-gradient(135deg, #DAF1DE 0%, #8EB69B 45%, #235347 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-blue {
+    background: linear-gradient(135deg, #8EB69B, #DAF1DE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Glow Effects ──────────────────────────────────────────── */
+.glow-blue {
+    box-shadow: 0 0 24px var(--glow-blue), 0 0 8px rgba(142, 182, 155, 0.28);
+}
+
+.glow-purple {
+    box-shadow: 0 0 24px var(--glow-purple), 0 0 8px rgba(35, 83, 71, 0.28);
+}
+
+.glow-green {
+    box-shadow: 0 0 24px var(--glow-green), 0 0 8px rgba(218, 241, 222, 0.28);
+}
+
+.glow-red {
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.45), 0 0 8px rgba(239, 68, 68, 0.25);
+}
+
+/* ── Shimmer Loading ───────────────────────────────────────── */
+.shimmer {
+    background: linear-gradient(90deg,
+            rgba(142, 182, 155, 0.08) 25%,
+            rgba(142, 182, 155, 0.22) 50%,
+            rgba(142, 182, 155, 0.08) 75%);
+    background-size: 200% 100%;
+    animation: shimmerMove 2s linear infinite;
+}
+
+@keyframes shimmerMove {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* ── Fade / Slide Animations ───────────────────────────────── */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.35s ease-out forwards;
+}
+
+.animate-slide-right {
+    animation: slideRight 0.3s ease-out forwards;
+}
+
+.animate-slide-left {
+    animation: slideLeft 0.3s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.25s ease-out forwards;
+}
+
+/* ── Utility Overrides ─────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px rgba(5, 31, 32, 0.96) inset;
+    -webkit-text-fill-color: var(--theme-lightest);
+    caret-color: var(--theme-lightest);
+    transition: background-color 5000s ease-in-out 0s;
+}
