@@ -77,8 +77,8 @@ Make sure you have [Node.js](https://nodejs.org/) (v16+) and a running instance 
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/rumman2004/ShopNest.git
-cd ShopNest
+git clone https://github.com/your-username/shopnest.git
+cd shopnest
 ```
 
 ### 2. Backend Setup

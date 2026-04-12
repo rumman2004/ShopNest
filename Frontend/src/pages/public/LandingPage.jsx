@@ -487,7 +487,7 @@ const PosMockup = memo(function PosMockup() {
           >
             <div className="flex justify-between mb-2">
               <span className="text-[10px] text-[#8EB69B]">Total</span>
-              <span className="text-[10px] font-bold text-[#DAF1DE]">₹375</span>
+              <span className="text-[10px] font-bold text-[#DAF1DE]">₹415</span>
             </div>
             <button className="w-full py-1.5 rounded-lg bg-gradient-to-r from-[#235347] to-[#8EB69B] text-[#051F20] text-[9px] font-semibold">
               Checkout
