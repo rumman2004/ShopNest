@@ -2,14 +2,10 @@ import Table  from '../../components/ui/Table'
 import Badge  from '../../components/ui/Badge'
 import { formatCurrency, formatDateTime } from '../../utils/formatters'
 
-// ✅ Helper to strictly prevent JavaScript from auto-shifting the database time
-const parseExactLocalTime = (timeStr) => {
+const parseBackendTime = (timeStr) => {
   if (!timeStr) return null
   let safeTime = String(timeStr).trim()
-  
-  // Strip out 'Z' or timezone offsets so the browser parses it strictly as LOCAL time
-  safeTime = safeTime.replace(/(Z|[+-]\d{2}:\d{2})$/, '')
-  
+
   // Ensure 'T' exists for standard ISO parsing
   if (!safeTime.includes('T')) {
     safeTime = safeTime.replace(' ', 'T')
@@ -40,7 +36,7 @@ export default function SalesTable({ sales = [], loading }) {
       key:    'sale_date',          
       render: (v) => (
         <span className="text-sm font-medium text-[#697773]">
-          {formatDateTime(parseExactLocalTime(v))}
+          {formatDateTime(parseBackendTime(v))}
         </span>
       ),
     },

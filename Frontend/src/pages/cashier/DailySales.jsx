@@ -7,7 +7,7 @@ import StatCard        from '../../components/ui/StatCard'
 import Button          from '../../components/ui/Button'
 import EmptyState      from '../../components/ui/EmptyState'
 import { formatCurrency, formatDate } from '../../utils/formatters'
-import { TrendingUp, ShoppingBag, Clock, RefreshCw, Store, Package, BarChart3 } from 'lucide-react'
+import { TrendingUp, ShoppingBag, Clock, RefreshCw, Store, Package, BarChart3, AlertTriangle } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
@@ -69,16 +69,26 @@ const getHourLabel = (value) => {
   return new Intl.DateTimeFormat(undefined, { hour: 'numeric', hour12: true }).format(date)
 }
 
+const getHourSortValue = (value) => {
+  const date = parseBackendDateTime(value)
+  return date ? date.getHours() : 24
+}
+
 function DailyBarChart({ sales }) {
   const buckets = new Map()
   sales.forEach((sale) => {
     const label = getHourLabel(sale.sale_date)
-    const current = buckets.get(label) || { hour: label, revenue: 0, sales: 0 }
+    const current = buckets.get(label) || {
+      hour: label,
+      hourSort: getHourSortValue(sale.sale_date),
+      revenue: 0,
+      sales: 0,
+    }
     current.revenue += Number(sale.total_amount || 0)
     current.sales += 1
     buckets.set(label, current)
   })
-  const data = Array.from(buckets.values())
+  const data = Array.from(buckets.values()).sort((a, b) => a.hourSort - b.hourSort)
 
   return (
     <div className="glass-card p-5">
@@ -118,6 +128,7 @@ function TopSoldToday({ sales }) {
     .map(([name, qty]) => ({ name, qty }))
     .sort((a, b) => b.qty - a.qty)
     .slice(0, 5)
+  const maxQty = Math.max(...rows.map((row) => row.qty), 1)
 
   return (
     <div className="glass-card p-5">
@@ -135,7 +146,7 @@ function TopSoldToday({ sales }) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-[#182321] truncate">{row.name}</p>
                 <div className="h-2 mt-2 rounded-full bg-[#f0ede5] overflow-hidden">
-                  <div className="h-full bg-[#004643]" style={{ width: `${Math.max(12, Math.min(100, row.qty * 12))}%` }} />
+                  <div className="h-full bg-[#004643]" style={{ width: `${Math.max(12, (row.qty / maxQty) * 100)}%` }} />
                 </div>
               </div>
               <span className="text-sm font-bold text-[#004643]">{row.qty}</span>
@@ -157,7 +168,7 @@ export default function DailySales() {
     return () => clearInterval(timer)
   }, [])
 
-  const { data, loading } = useFetch(
+  const { data, loading, error } = useFetch(
     () => shopId
       ? salesService.getDailySummary(shopId, today)
       : Promise.resolve(null),
@@ -185,6 +196,28 @@ export default function DailySales() {
           icon={<Store size={56} className="text-[#004643]" />}
           title="No Shop Selected"
           message="Please select a shop to view the daily sales data."
+        />
+      </div>
+    )
+  }
+
+  if (error && !loading && sales.length === 0) {
+    return (
+      <div className="animate-fade-in py-10">
+        <EmptyState
+          icon={<AlertTriangle size={56} className="text-red-600" />}
+          title="Could Not Load Daily Sales"
+          message={error}
+          action={(
+            <Button
+              variant="outline"
+              size="md"
+              icon={<RefreshCw size={16} />}
+              onClick={() => setTick((t) => t + 1)}
+            >
+              Try Again
+            </Button>
+          )}
         />
       </div>
     )

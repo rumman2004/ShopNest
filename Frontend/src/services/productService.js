@@ -21,7 +21,9 @@ const productService = {
   delete: (shopId, productId) =>
     api.delete(`/shops/${shopId}/products/${productId}`),
 
-  // ✅ Removed: getCategories — categories are now a static list in ProductForm
+  // GET /categories/shop/:shop_id
+  getCategories: (shopId) =>
+    api.get(`/categories/shop/${shopId}`),
 
   // Upload image via the existing PUT update route
   // Backend already has upload.single('image') middleware on PUT /:product_id

@@ -21,7 +21,7 @@ export const useFetch = (fetchFn, deps = [], immediate = true) => {
   }, deps) // eslint-disable-line
 
   useEffect(() => {
-    if (immediate) execute()
+    if (immediate) execute().catch(() => {})
   }, [execute]) // eslint-disable-line
 
   const refetch = useCallback(() => execute(), [execute])

@@ -122,9 +122,18 @@ function WelcomeOverlay() {
 // --- Main Layout Component ---
 export default function CashierLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { pathname } = useLocation()
   
   const title = PAGE_TITLES[pathname] || 'ShopNest POS'
+
+  const handleSidebarToggle = () => {
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      setSidebarCollapsed((current) => !current)
+    } else {
+      setSidebarOpen(true)
+    }
+  }
 
   return (
     <>
@@ -132,11 +141,16 @@ export default function CashierLayout() {
       <WelcomeOverlay />
 
       <div className="flex h-screen overflow-hidden bg-[#F0EDE5] text-[#182321]">
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <Sidebar
+          open={sidebarOpen}
+          collapsed={sidebarCollapsed}
+          onClose={() => setSidebarOpen(false)}
+        />
         
         <div className="flex flex-col flex-1 overflow-hidden">
           <Navbar
-            onMenuClick={() => setSidebarOpen(true)}
+            onMenuClick={handleSidebarToggle}
+            sidebarCollapsed={sidebarCollapsed}
             title={title}
           />
           

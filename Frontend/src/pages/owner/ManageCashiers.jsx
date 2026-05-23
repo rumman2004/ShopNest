@@ -117,6 +117,9 @@ export default function ManageCashiers() {
         isOpen={modal.open}
         onClose={closeModal}
         title={modal.cashier ? 'Edit Cashier Details' : 'Register New Cashier'}
+        eyebrow="Staff Access"
+        description={modal.cashier ? 'Update staff profile details for this cashier account.' : 'Create a cashier login for the selected shop.'}
+        icon={<Users size={20} />}
         size="sm"
       >
         <CashierForm

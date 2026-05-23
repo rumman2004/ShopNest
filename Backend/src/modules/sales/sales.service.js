@@ -10,6 +10,33 @@ const toDateString = (value) => {
     return String(value).split('T')[0];
 };
 
+const parseTimezoneOffset = (offset = '+05:30') => {
+    const match = String(offset).match(/^([+-])(\d{2}):(\d{2})$/);
+    if (!match) return 330;
+
+    const sign = match[1] === '-' ? -1 : 1;
+    return sign * ((parseInt(match[2], 10) * 60) + parseInt(match[3], 10));
+};
+
+const toUtcSqlDateTime = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
+
+const getLocalDateRangeUtcBounds = (start_date, end_date) => {
+    const startStr = toDateString(start_date);
+    const endStr = toDateString(end_date);
+    const offsetMinutes = parseTimezoneOffset(process.env.BUSINESS_TIMEZONE_OFFSET || '+05:30');
+
+    const [startYear, startMonth, startDay] = startStr.split('-').map(Number);
+    const [endYear, endMonth, endDay] = endStr.split('-').map(Number);
+
+    const startUtcMs = Date.UTC(startYear, startMonth - 1, startDay) - (offsetMinutes * 60 * 1000);
+    const endUtcMs = Date.UTC(endYear, endMonth - 1, endDay + 1) - (offsetMinutes * 60 * 1000);
+
+    return {
+        startDateTime: toUtcSqlDateTime(new Date(startUtcMs)),
+        endDateTime: toUtcSqlDateTime(new Date(endUtcMs)),
+    };
+};
+
 const verifyShopAccess = async (shop_id, user_id, user_type) => {
     if (user_type === 'owner') {
         const [shop] = await db.execute(
@@ -266,8 +293,9 @@ const getSalesByCashier = async (data) => {
         let queryParams = [cashier_id];
 
         if (startStr && endStr) {
-            whereClause += ' AND DATE(s.sale_date) BETWEEN ? AND ?';
-            queryParams.push(startStr, endStr);
+            const { startDateTime, endDateTime } = getLocalDateRangeUtcBounds(startStr, endStr);
+            whereClause += ' AND s.sale_date >= ? AND s.sale_date < ?';
+            queryParams.push(startDateTime, endDateTime);
         }
 
         // ✅ FIX: Force strict integers to prevent NaN and ER_WRONG_ARGUMENTS
@@ -324,6 +352,15 @@ const getSalesByDateRange = async (data) => {
         const pageInt = Math.max(1, parseInt(page, 10) || 1);
         const limitInt = Math.max(1, parseInt(limit, 10) || 10);
         const offsetInt = Math.max(0, (pageInt - 1) * limitInt);
+        const { startDateTime, endDateTime } = getLocalDateRangeUtcBounds(start_date, end_date);
+
+        let whereClause = 'WHERE s.shop_id = ? AND s.sale_date >= ? AND s.sale_date < ?';
+        let queryParams = [shop_id, startDateTime, endDateTime];
+
+        if (user_type === 'cashier') {
+            whereClause += ' AND s.cashier_id = ?';
+            queryParams.push(user_id);
+        }
 
         const [sales] = await db.execute(
             `SELECT 
@@ -336,21 +373,53 @@ const getSalesByDateRange = async (data) => {
              FROM sales s
              JOIN cashiers c ON s.cashier_id = c.cashier_id
              LEFT JOIN sale_items si ON s.sale_id = si.sale_id
-             WHERE s.shop_id = ? AND DATE(s.sale_date) BETWEEN ? AND ?
+             ${whereClause}
              GROUP BY s.sale_id, s.total_amount, s.sale_date, s.tendered_amount, c.full_name
              ORDER BY s.sale_date DESC
              LIMIT ${limitInt} OFFSET ${offsetInt}`,
-            [shop_id, start_date, end_date]
+            queryParams
         );
+
+        if (sales.length > 0) {
+            const saleIds = sales.map((sale) => sale.sale_id);
+            const placeholders = saleIds.map(() => '?').join(', ');
+
+            const [items] = await db.execute(
+                `SELECT
+                    si.sale_id,
+                    si.sale_item_id,
+                    si.product_id,
+                    si.quantity,
+                    si.unit_price,
+                    si.subtotal,
+                    p.product_name,
+                    p.image_url
+                 FROM sale_items si
+                 JOIN products p ON si.product_id = p.product_id
+                 WHERE si.sale_id IN (${placeholders})
+                 ORDER BY si.sale_item_id`,
+                saleIds
+            );
+
+            const itemsBySale = items.reduce((map, item) => {
+                if (!map.has(item.sale_id)) map.set(item.sale_id, []);
+                map.get(item.sale_id).push(item);
+                return map;
+            }, new Map());
+
+            sales.forEach((sale) => {
+                sale.items = itemsBySale.get(sale.sale_id) || [];
+            });
+        }
 
         const [statsResult] = await db.execute(
             `SELECT 
                 COUNT(*) AS total_sales,
                 COALESCE(SUM(total_amount), 0) AS total_revenue,
                 MAX(sale_date) AS last_sale_time
-             FROM sales
-             WHERE shop_id = ? AND DATE(sale_date) BETWEEN ? AND ?`,
-            [shop_id, start_date, end_date]
+             FROM sales s
+             ${whereClause}`,
+            queryParams
         );
 
         const totalSales = parseInt(statsResult[0].total_sales, 10) || 0;

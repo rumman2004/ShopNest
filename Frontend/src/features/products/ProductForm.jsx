@@ -6,36 +6,13 @@ import Select                  from '../../components/ui/Select'
 import Button                  from '../../components/ui/Button'
 import { validators }          from '../../utils/validators'
 
-const SHOP_CATEGORIES = [
-  'Art Gallery', 'Automotive Showroom', 'Bakery', 'Barbershop', 'Beauty Salon',
-  'Big-box Store', 'Book Store', 'Brand Flagship', 'Brand Shop', 'Brand Showroom',
-  'Bread Shop', 'Cafe', 'Cake Shop', 'Candy Store', 'Clothing Store',
-  'Co-operative', 'Collectables', 'Concept Shop', 'Concession Stand', 'Confectionery',
-  'Convenience Store', 'Craft Shop', 'Cupcake Shop', 'Delicatessen', 'Department Store',
-  'Discount Shop', 'DIY Shop', 'Dollar Store', 'Donut Shop', 'Dress Shop',
-  'Dry Cleaner', 'Duty-free Shop', 'Electronics Store', 'Fabric / Sewing Supplies', 'Farmers Market',
-  'Fashion Boutique', 'Fast Food Restaurant', 'Franchise / Chain Store', 'Fruit Market', 'Furniture Store',
-  'Garden Center', 'Gas Station', 'General Store', 'Gift Shop', 'Hobby Shop',
-  'Home Decor', 'Home Improvement', 'Hypermarket', 'Imported Goods', 'Jeweler',
-  'Junk Shop', 'Kiosk', 'Kitchen Store', 'Liquidator', 'Luxury Brand Shop',
-  'Mattress Store', 'Mechanic / Garage', 'Megastore', 'Music Shop', 'Newspaper Stand',
-  'Niche Shop', 'Outdoor Shop / Outfitter', 'Patisserie', 'Pharmacy / Drug Store', 'Pop-up Shop',
-  'Popular Culture (e.g. Anime Shop)', 'Reuse Cafe', 'Second-hand / Thrift Shop', 'Service Center', 'Software / Video Games',
-  'Souvenir Shop', 'Specialty Shop', 'Sports Store', 'Stationery Shop', 'Street Vendors',
-  'Supermarket', 'Surplus Shop', 'Tailor', 'Takeout Restaurant', 'Tattoo Shop',
-  'Ticket Vendors', 'Trading Shop', 'Travel Agent', 'Truck Stop', 'Variety Store',
-  'Vegetable Market', 'Wholesaler',
-]
 
-const categoryOptions = [
-  { value: '', label: 'Select a category' },
-  ...SHOP_CATEGORIES.map((name) => ({ value: name, label: name })),
-]
 
 export default function ProductForm({
   onSubmit,
   defaultValues = null,
   loading,
+  categories = [],
 }) {
   const {
     register,
@@ -80,13 +57,15 @@ export default function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 animate-fade-in pb-1">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 animate-fade-in">
 
       {/* ─── SECTION 1: GENERAL INFO (Grid Layout for Compactness) ─── */}
-      <div className="p-4 rounded-lg bg-[#f7f4ed] border border-[#d9d4c8] flex flex-col gap-3">
+      <div className="p-4 rounded-lg bg-white border border-[#d9d4c8] flex flex-col gap-3 shadow-sm">
         <div className="flex items-center gap-2 mb-1">
-          <Package size={14} className="text-[#004643]" />
-          <h3 className="text-[11px] font-bold text-[#004643] uppercase tracking-wider">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#e5f2f1] text-[#004643]">
+            <Package size={14} />
+          </span>
+          <h3 className="text-xs font-bold text-[#004643] uppercase tracking-wider">
             General Information
           </h3>
         </div>
@@ -112,7 +91,10 @@ export default function ProductForm({
             render={({ field }) => (
               <Select
                 label="Category *"
-                options={categoryOptions}
+                options={[
+                  { value: '', label: 'Select a category' },
+                  ...categories.map((c) => ({ value: c.category_name, label: c.category_name })),
+                ]}
                 error={errors.category?.message}
                 value={field.value}
                 onChange={field.onChange}
@@ -144,10 +126,12 @@ export default function ProductForm({
       </div>
 
       {/* ─── SECTION 2: PRICING & STOCK (3-Column Grid) ─── */}
-      <div className="p-4 rounded-lg bg-[#f7f4ed] border border-[#d9d4c8] flex flex-col gap-3">
+      <div className="p-4 rounded-lg bg-white border border-[#d9d4c8] flex flex-col gap-3 shadow-sm">
         <div className="flex items-center gap-2 mb-1">
-          <Tag size={14} className="text-[#004643]" />
-          <h3 className="text-[11px] font-bold text-[#004643] uppercase tracking-wider">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#e5f2f1] text-[#004643]">
+            <Tag size={14} />
+          </span>
+          <h3 className="text-xs font-bold text-[#004643] uppercase tracking-wider">
             Financials & Inventory
           </h3>
         </div>
@@ -191,7 +175,7 @@ export default function ProductForm({
       </div>
 
       {/* ─── ACTION BUTTON ─── */}
-      <div className="pt-2 sticky bottom-0 bg-transparent z-10 mt-1">
+      <div className="sticky bottom-0 z-10 -mx-5 sm:-mx-6 -mb-5 mt-1 border-t border-[#d9d4c8] bg-[#faf8f2]/95 px-5 sm:px-6 py-4 backdrop-blur">
         <Button 
           type="submit" 
           variant="primary" 

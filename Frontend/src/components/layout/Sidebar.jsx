@@ -21,7 +21,7 @@ const CASHIER_NAV = [
   { label: 'Stock Check',  href: '/cashier/stock', icon: ClipboardList },
 ]
 
-export default function Sidebar({ open, onClose }) {
+export default function Sidebar({ open, collapsed = false, onClose }) {
   const { user, isOwner } = useAuth()
   const { activeShop }    = useShop()
   const nav = isOwner ? OWNER_NAV : CASHIER_NAV
@@ -42,18 +42,19 @@ export default function Sidebar({ open, onClose }) {
           fixed top-0 left-0 z-40 h-full w-64
           bg-white border-r border-[#d9d4c8]
           flex flex-col shadow-2xl lg:shadow-sm
-          transition-transform duration-300 ease-out
+          transition-all duration-300 ease-out
           ${open ? 'translate-x-0' : '-translate-x-full'}
           lg:translate-x-0 lg:static lg:z-auto
+          ${collapsed ? 'lg:w-20' : 'lg:w-64'}
         `}
       >
         {/* --- Logo Area --- */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[#ebe6dc]">
-          <div className="flex items-center gap-3">
+        <div className={`flex items-center justify-between px-6 py-5 border-b border-[#ebe6dc] ${collapsed ? 'lg:justify-center lg:px-3' : ''}`}>
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-lg bg-[#004643] flex items-center justify-center shadow-sm">
               <Store size={18} className="text-white" />
             </div>
-            <span className="text-xl font-extrabold text-[#004643] tracking-tight">
+            <span className={`text-xl font-extrabold text-[#004643] tracking-tight ${collapsed ? 'lg:hidden' : ''}`}>
               ShopNest
             </span>
           </div>
@@ -67,12 +68,12 @@ export default function Sidebar({ open, onClose }) {
 
         {/* --- Active Shop Indicator --- */}
         {isOwner && activeShop && (
-          <div className="mx-4 mt-5 px-4 py-3 rounded-lg bg-[#e5f2f1] border border-[#c8ddda] flex items-center gap-3">
+          <div className={`mx-4 mt-5 px-4 py-3 rounded-lg bg-[#e5f2f1] border border-[#c8ddda] flex items-center gap-3 ${collapsed ? 'lg:mx-3 lg:justify-center lg:px-2' : ''}`}>
             <div className="relative flex h-2.5 w-2.5 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
             </div>
-            <div className="min-w-0">
+            <div className={`min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
               <p className="text-[10px] font-bold text-[#697773] uppercase tracking-widest mb-0.5">
                 Active Store
               </p>
@@ -84,9 +85,9 @@ export default function Sidebar({ open, onClose }) {
         )}
 
         {/* --- Navigation Links --- */}
-        <nav className="flex-1 px-4 py-6 overflow-y-auto no-scrollbar space-y-6">
+        <nav className={`flex-1 px-4 py-6 overflow-y-auto no-scrollbar space-y-6 ${collapsed ? 'lg:px-3' : ''}`}>
           <div>
-            <p className="text-[10px] font-bold text-[#697773] uppercase tracking-widest px-3 mb-3">
+            <p className={`text-[10px] font-bold text-[#697773] uppercase tracking-widest px-3 mb-3 ${collapsed ? 'lg:hidden' : ''}`}>
               {isOwner ? 'Management' : 'Operations'}
             </p>
             <ul className="space-y-1.5">
@@ -95,9 +96,11 @@ export default function Sidebar({ open, onClose }) {
                   <NavLink
                     to={href}
                     onClick={onClose}
+                    title={collapsed ? label : undefined}
                     className={({ isActive }) => `
                       group flex items-center justify-between gap-3 px-3 py-2.5
                       rounded-xl text-sm font-semibold transition-all duration-200
+                      ${collapsed ? 'lg:justify-center lg:px-2' : ''}
                       ${isActive
                         ? 'bg-[#004643] text-white border border-[#004643] shadow-sm'
                         : 'text-[#34413e] hover:text-[#004643] hover:bg-[#e5f2f1] border border-transparent'
@@ -111,9 +114,9 @@ export default function Sidebar({ open, onClose }) {
                             size={18} 
                             className={isActive ? 'text-white' : 'text-[#697773] group-hover:text-[#004643] transition-colors'} 
                           />
-                          {label}
+                          <span className={collapsed ? 'lg:hidden' : ''}>{label}</span>
                         </span>
-                        {isActive && <ChevronRight size={14} className="text-white" />}
+                        {isActive && <ChevronRight size={14} className={`text-white ${collapsed ? 'lg:hidden' : ''}`} />}
                       </>
                     )}
                   </NavLink>
@@ -124,10 +127,10 @@ export default function Sidebar({ open, onClose }) {
         </nav>
 
         {/* --- User Profile Area --- */}
-        <div className="p-5 border-t border-[#ebe6dc] bg-[#faf8f2] mt-auto">
-          <div className="flex items-center gap-3 px-1">
+        <div className={`p-5 border-t border-[#ebe6dc] bg-[#faf8f2] mt-auto ${collapsed ? 'lg:px-3' : ''}`}>
+          <div className={`flex items-center gap-3 px-1 ${collapsed ? 'lg:justify-center' : ''}`}>
             <Avatar name={user?.full_name || 'User'} size="sm" />
-            <div className="flex-1 min-w-0">
+            <div className={`flex-1 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
               <p className="text-sm font-bold text-[#182321] truncate">
                 {user?.full_name}
               </p>

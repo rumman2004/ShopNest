@@ -126,7 +126,15 @@ export default function ManageShops() {
         </div>
       )}
 
-      <Modal isOpen={modal.open} onClose={closeModal} title={modal.shop ? 'Edit Shop' : 'Create New Shop'} size="sm">
+      <Modal
+        isOpen={modal.open}
+        onClose={closeModal}
+        title={modal.shop ? 'Edit Shop' : 'Create New Shop'}
+        eyebrow="Store Setup"
+        description={modal.shop ? 'Update the store profile shown across dashboards and reports.' : 'Add a new store location to manage inventory and sales.'}
+        icon={<Store size={20} />}
+        size="sm"
+      >
         <ShopForm onSubmit={handleSubmit} defaultValues={modal.shop} loading={saving} />
       </Modal>
 

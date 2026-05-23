@@ -11,7 +11,7 @@ import Avatar from '../ui/Avatar'
 
 const LOW_STOCK_THRESHOLD = 10
 
-export default function Navbar({ onMenuClick, title }) {
+export default function Navbar({ onMenuClick, title, sidebarCollapsed = false }) {
   const { user, logout } = useAuth()
   const { shopId }       = useShop()
   const { toast }        = useToast()
@@ -56,7 +56,9 @@ export default function Navbar({ onMenuClick, title }) {
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuClick}
-          className="lg:hidden text-[#697773] hover:text-[#004643] transition-colors p-2 rounded-lg hover:bg-[#e5f2f1] focus:outline-none focus:ring-2 focus:ring-[#004643]"
+          className="text-[#697773] hover:text-[#004643] transition-colors p-2 rounded-lg hover:bg-[#e5f2f1] focus:outline-none focus:ring-2 focus:ring-[#004643]"
+          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Toggle sidebar'}
+          title={sidebarCollapsed ? 'Expand sidebar' : 'Toggle sidebar'}
         >
           <Menu size={22} />
         </button>

@@ -110,7 +110,7 @@ function DetailSummary({ action, details }) {
 
   // ── Stock Adjusted ──
   if (action === 'stock_adjusted') {
-    const { old_stock, new_stock, adjustment_type, quantity, reason } = details
+    const { old_stock, new_stock, adjustment_type, reason } = details
     const isIncrease = new_stock > old_stock
     return (
       <div className="flex flex-wrap gap-1 mt-1">
@@ -203,7 +203,7 @@ export default function ActivityFeed() {
   const logs = data?.data?.logs ?? []
 
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full min-h-[400px]">
       <CardHeader className="border-b border-[#ebe6dc] pb-4">
         <CardTitle className="flex items-center gap-2">
           <Activity size={18} className="text-[#004643]" />

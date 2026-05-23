@@ -12,8 +12,11 @@ const salesService = {
 
   getDailySummary: (shopId, date) =>
     api.get(`/sales/shop/${shopId}/date-range`, {
-      params: { start_date: date, end_date: date }
+      params: { start_date: date, end_date: date, limit: 100 }
     }),
+
+  getByDateRange: (shopId, params) =>
+    api.get(`/sales/shop/${shopId}/date-range`, { params }),
 
   getSalesByCashier: (cashierId, params) =>
     api.get(`/sales/cashier/${cashierId}`, { params }),

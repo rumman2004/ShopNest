@@ -1,6 +1,41 @@
 const db = require('../../config/database'); // Fixed path: ../../config/database
 const { ApiError } = require('../../utils/ApiError'); // Fixed path: ../../utils/ApiError
 
+const toDateString = (value) => {
+    if (!value) return null;
+    if (value instanceof Date) return value.toISOString().split('T')[0];
+    return String(value).split('T')[0];
+};
+
+const parseTimezoneOffset = (offset = '+05:30') => {
+    const match = String(offset).match(/^([+-])(\d{2}):(\d{2})$/);
+    if (!match) return 330;
+
+    const sign = match[1] === '-' ? -1 : 1;
+    return sign * ((parseInt(match[2], 10) * 60) + parseInt(match[3], 10));
+};
+
+const toUtcSqlDateTime = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
+
+const getReportDateBounds = (start_date, end_date) => {
+    const startStr = toDateString(start_date);
+    const endStr = toDateString(end_date);
+    const offset = process.env.BUSINESS_TIMEZONE_OFFSET || '+05:30';
+    const offsetMinutes = parseTimezoneOffset(offset);
+
+    const [startYear, startMonth, startDay] = startStr.split('-').map(Number);
+    const [endYear, endMonth, endDay] = endStr.split('-').map(Number);
+
+    const startUtcMs = Date.UTC(startYear, startMonth - 1, startDay) - (offsetMinutes * 60 * 1000);
+    const endUtcMs = Date.UTC(endYear, endMonth - 1, endDay + 1) - (offsetMinutes * 60 * 1000);
+
+    return {
+        offset,
+        startDateTime: toUtcSqlDateTime(new Date(startUtcMs)),
+        endDateTime: toUtcSqlDateTime(new Date(endUtcMs)),
+    };
+};
+
 // Helper function to verify shop access
 const verifyShopAccess = async (shop_id, user_id, user_type) => {
     if (user_type === 'cashier') {
@@ -32,6 +67,7 @@ const getDashboardStats = async (data) => {
 
     try {
         await verifyShopAccess(shop_id, user_id, user_type);
+        const { offset, startDateTime, endDateTime } = getReportDateBounds(start_date, end_date);
 
         // ✅ FIX 1: Calculate Sales, Revenue, and Average WITHOUT JOINING sale_items.
         // This prevents total_amount from duplicating if a sale has multiple items.
@@ -42,8 +78,9 @@ const getDashboardStats = async (data) => {
                 COALESCE(AVG(total_amount), 0) AS avg_sale
              FROM sales
              WHERE shop_id = ?
-               AND DATE(sale_date) BETWEEN ? AND ?`,
-            [shop_id, start_date, end_date]
+               AND sale_date >= ?
+               AND sale_date < ?`,
+            [shop_id, startDateTime, endDateTime]
         );
 
         // ✅ FIX 2: Calculate Profit separately by joining the items.
@@ -59,21 +96,23 @@ const getDashboardStats = async (data) => {
              JOIN sale_items si ON s.sale_id = si.sale_id
              JOIN products p ON si.product_id = p.product_id
              WHERE s.shop_id = ?
-               AND DATE(s.sale_date) BETWEEN ? AND ?`,
-            [shop_id, start_date, end_date]
+               AND s.sale_date >= ?
+               AND s.sale_date < ?`,
+            [shop_id, startDateTime, endDateTime]
         );
 
         // ✅ Daily revenue (for chart)
         const [dailyRevenue] = await db.execute(
             `SELECT
-                DATE(s.sale_date) AS date,
+                DATE(CONVERT_TZ(s.sale_date, '+00:00', ?)) AS date,
                 SUM(s.total_amount) AS revenue
              FROM sales s
              WHERE s.shop_id = ?
-               AND DATE(s.sale_date) BETWEEN ? AND ?
-             GROUP BY DATE(s.sale_date)
+               AND s.sale_date >= ?
+               AND s.sale_date < ?
+             GROUP BY DATE(CONVERT_TZ(s.sale_date, '+00:00', ?))
              ORDER BY date ASC`,
-            [shop_id, start_date, end_date]
+            [offset, shop_id, startDateTime, endDateTime, offset]
         );
 
         // ✅ Top products (by quantity sold)
@@ -85,11 +124,12 @@ const getDashboardStats = async (data) => {
              JOIN sales s ON si.sale_id = s.sale_id
              JOIN products p ON si.product_id = p.product_id
              WHERE s.shop_id = ?
-               AND DATE(s.sale_date) BETWEEN ? AND ?
+               AND s.sale_date >= ?
+               AND s.sale_date < ?
              GROUP BY p.product_id
              ORDER BY quantity_sold DESC
              LIMIT 5`,
-            [shop_id, start_date, end_date]
+            [shop_id, startDateTime, endDateTime]
         );
 
         // ✅ Recent sales
@@ -102,10 +142,11 @@ const getDashboardStats = async (data) => {
              FROM sales s
              JOIN cashiers c ON s.cashier_id = c.cashier_id
              WHERE s.shop_id = ?
-               AND DATE(s.sale_date) BETWEEN ? AND ?
+               AND s.sale_date >= ?
+               AND s.sale_date < ?
              ORDER BY s.sale_date DESC
              LIMIT 10`,
-            [shop_id, start_date, end_date]
+            [shop_id, startDateTime, endDateTime]
         );
 
         return {
@@ -432,6 +473,7 @@ const exportSalesData = async (data) => {
     console.log('[EXPORT] Date range:', start_date, 'to', end_date);
     
     await verifyShopAccess(shop_id, user_id, user_type)
+    const { startDateTime, endDateTime } = getReportDateBounds(start_date, end_date)
 
     const [shopRows] = await db.execute(
       'SELECT shop_name FROM shops WHERE shop_id = ?',
@@ -456,9 +498,9 @@ const exportSalesData = async (data) => {
        JOIN cashiers c ON s.cashier_id = c.cashier_id
        JOIN sale_items si ON s.sale_id = si.sale_id
        JOIN products p ON si.product_id = p.product_id
-       WHERE s.shop_id = ? AND DATE(s.sale_date) BETWEEN ? AND ?
+       WHERE s.shop_id = ? AND s.sale_date >= ? AND s.sale_date < ?
        ORDER BY s.sale_id ASC`,
-      [shop_id, start_date, end_date]
+      [shop_id, startDateTime, endDateTime]
     )
 
     console.log('[EXPORT] Found', salesData.length, 'sale records');

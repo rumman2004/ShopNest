@@ -66,10 +66,10 @@ export default function ImageUploader({ onUpload, currentUrl = null }) {
   }
 
   return (
-    <div className="w-full animate-fade-in">
+    <div className="w-full animate-fade-in space-y-4">
       {preview ? (
         /* ─── PREVIEW STATE ─── */
-        <div className="relative w-full h-48 sm:h-56 rounded-lg overflow-hidden border border-[#d9d4c8] group shadow-lg bg-white">
+        <div className="relative w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-[#d9d4c8] group shadow-sm bg-white">
           
           <img 
             src={preview} 
@@ -84,7 +84,7 @@ export default function ImageUploader({ onUpload, currentUrl = null }) {
           <button
             type="button"
             onClick={clear}
-            className="absolute top-3 right-3 p-2 rounded-full bg-white text-red-700 hover:bg-red-50 transition-all duration-300 border border-[#d9d4c8] shadow-lg"
+            className="absolute top-3 right-3 p-2 rounded-lg bg-white text-red-700 hover:bg-red-50 transition-all duration-200 border border-[#d9d4c8] shadow-sm"
             title="Remove image"
           >
             <X size={16} strokeWidth={2.5} />
@@ -121,13 +121,13 @@ export default function ImageUploader({ onUpload, currentUrl = null }) {
             }
           }}
           className={`
-            w-full h-48 sm:h-56 rounded-lg border-2 border-dashed
+            w-full h-56 sm:h-64 rounded-lg border-2 border-dashed
             flex flex-col items-center justify-center gap-4
             cursor-pointer transition-all duration-300 ease-out
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#004643] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0EDE5]
             ${dragging
               ? 'border-[#004643] bg-[#e5f2f1] scale-[1.02]'
-              : 'border-[#9bb7b2] bg-[#f7f4ed] hover:border-[#004643]'
+              : 'border-[#9bb7b2] bg-white hover:border-[#004643] hover:bg-[#f7f4ed]'
             }
           `}
         >
@@ -162,7 +162,7 @@ export default function ImageUploader({ onUpload, currentUrl = null }) {
 
       {/* ─── ERROR STATE ─── */}
       {error && (
-        <div className="mt-3 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs animate-fade-in">
+        <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs animate-fade-in">
           <AlertCircle size={14} className="shrink-0" />
           <p className="font-medium">{error}</p>
         </div>
@@ -170,7 +170,7 @@ export default function ImageUploader({ onUpload, currentUrl = null }) {
 
       {/* ─── UPLOAD BUTTON ─── */}
       {file && (
-        <div className="mt-4 animate-slide-up">
+        <div className="sticky bottom-0 z-10 -mx-5 sm:-mx-6 -mb-5 border-t border-[#d9d4c8] bg-[#faf8f2]/95 px-5 sm:px-6 py-4 backdrop-blur animate-slide-up">
           <Button
             type="button"
             variant="primary" // Ensure your generic Button handles this variant gracefully

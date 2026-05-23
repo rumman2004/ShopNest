@@ -29,12 +29,14 @@ export default function ShopForm({ onSubmit, defaultValues = null, loading }) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 animate-fade-in">
       
       {/* ─── SHOP DETAILS CARD ─── */}
-      <div className="p-5 rounded-2xl bg-[#e5f2f1] border border-[#d9d4c8] space-y-4 shadow-sm">
+      <div className="p-4 sm:p-5 rounded-lg bg-white border border-[#d9d4c8] space-y-4 shadow-sm">
         
         {/* Section Header */}
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[#ebe6dc]">
-          <Store size={18} className="text-[#697773]" />
-          <h3 className="text-sm font-semibold text-[#182321] uppercase tracking-widest">
+        <div className="flex items-center gap-3 pb-3 border-b border-[#ebe6dc]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e5f2f1] text-[#004643]">
+            <Store size={16} />
+          </span>
+          <h3 className="text-xs font-bold text-[#004643] uppercase tracking-wider">
             {defaultValues?.shop_id ? 'Edit Shop Profile' : 'New Shop Profile'}
           </h3>
         </div>
@@ -62,7 +64,7 @@ export default function ShopForm({ onSubmit, defaultValues = null, loading }) {
       </div>
 
       {/* ─── ACTION BUTTON ─── */}
-      <div className="pt-3 pb-1 sticky bottom-0 bg-[#faf8f2]/80  z-10 -mx-2 px-2">
+      <div className="sticky bottom-0 z-10 -mx-5 sm:-mx-6 -mb-5 mt-1 border-t border-[#d9d4c8] bg-[#faf8f2]/95 px-5 sm:px-6 py-4 backdrop-blur">
         <Button 
           type="submit" 
           variant="primary" 
@@ -70,7 +72,7 @@ export default function ShopForm({ onSubmit, defaultValues = null, loading }) {
           size="lg"
           loading={loading}
           icon={<CheckCircle2 size={18} />}
-          className="shadow-[0_0_20px_rgba(0,111,115,0.3)] border border-[#d9d4c8]"
+          className="border border-[#004643]"
         >
           {defaultValues?.shop_id ? 'Save Changes' : 'Create Shop'}
         </Button>

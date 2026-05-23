@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useShop }        from '../../hooks/useShop'
 import { useFetch }       from '../../hooks/useFetch'
 import { useToast }       from '../../hooks/useToast'
+import { useGsapReveal }  from '../../hooks/useGsapReveal'
 import salesService       from '../../services/salesService'
 import SalesTable         from '../../features/sales/SalesTable'
 import RevenueChart       from '../../features/dashboard/RevenueChart'
@@ -12,7 +13,7 @@ import Button             from '../../components/ui/Button'
 import Pagination         from '../../components/ui/Pagination'
 import EmptyState         from '../../components/ui/EmptyState'
 import { formatCurrency } from '../../utils/formatters'
-import { TrendingUp, ShoppingBag, BarChart3, Download, Store, RefreshCw, PieChart as PieIcon } from 'lucide-react'
+import { TrendingUp, ShoppingBag, BarChart3, Download, Store, RefreshCw, PieChart as PieIcon, CalendarDays, Percent } from 'lucide-react'
 import { PAGINATION_LIMIT } from '../../utils/constants'
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
@@ -37,7 +38,7 @@ const CHART_COLORS = ['#004643', '#0f766e', '#2563eb', '#d97706', '#7c3aed', '#d
 
 function ChartCard({ title, icon, children, empty }) {
   return (
-    <div className="glass-card p-5">
+    <div className="rounded-lg border border-[#d9d4c8] bg-white p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#ebe6dc]">
         <span className="text-[#004643]">{icon}</span>
         <h3 className="text-base font-bold text-[#182321]">{title}</h3>
@@ -113,10 +114,11 @@ function ProfitRevenueChart({ reports }) {
 }
 
 export default function FinanceReports() {
-  const { shopId } = useShop()
+  const { activeShop, shopId } = useShop()
   const { toast }  = useToast()
   const [period,   setPeriod] = useState('30d')
   const [page,     setPage]   = useState(1)
+  const pageRef = useRef(null)
 
   // ✅ Auto-refresh mechanism
   const [tick, setTick] = useState(0)
@@ -148,12 +150,16 @@ export default function FinanceReports() {
 
   // Get Table data (added tick)
   const { data: rawSales, loading: sLoading } = useFetch(
-    () => shopId ? salesService.getAll(shopId, { page, limit: PAGINATION_LIMIT }) : Promise.resolve(null),
-    [shopId, page, tick]
+    () => shopId
+      ? salesService.getByDateRange(shopId, { ...dateParams, page, limit: PAGINATION_LIMIT })
+      : Promise.resolve(null),
+    [shopId, page, dateParams, tick]
   )
   const salesData       = rawSales?.data?.data ?? rawSales?.data ?? rawSales ?? {}
   const salesList       = salesData.sales ?? []
   const totalSalesCount = salesData.pagination?.totalItems ?? 0
+
+  useGsapReveal(pageRef, [shopId, period, rLoading])
 
   const handleExport = async () => {
     if (!shopId) return
@@ -194,26 +200,34 @@ export default function FinanceReports() {
     )
   }
 
+  const periodLabel = PERIOD_OPTIONS.find((option) => option.value === period)?.label ?? 'Selected period'
+  const profitMargin = Number(reports?.total_revenue ?? 0)
+    ? `${((Number(reports?.total_profit ?? 0) / Number(reports?.total_revenue ?? 0)) * 100).toFixed(1)}%`
+    : '0.0%'
+
   const stats = [
-    { title: 'Revenue',      value: formatCurrency(reports?.total_revenue ?? 0), icon: <TrendingUp size={20} />,  color: 'blue'   },
-    { title: 'Total Sales',  value: reports?.total_sales ?? 0,                   icon: <ShoppingBag size={20} />, color: 'green'  },
-    { title: 'Gross Profit', value: formatCurrency(reports?.total_profit ?? 0),  icon: <BarChart3 size={20} />,   color: 'purple' },
-    { title: 'Avg. Sale',    value: formatCurrency(reports?.avg_sale ?? 0),      icon: <BarChart3 size={20} />,   color: 'amber'  },
+    { title: 'Revenue',      value: formatCurrency(reports?.total_revenue ?? 0), subtitle: periodLabel, icon: <TrendingUp size={20} />,  color: 'blue'   },
+    { title: 'Transactions', value: reports?.total_sales ?? 0,                   subtitle: 'Completed sales', icon: <ShoppingBag size={20} />, color: 'green'  },
+    { title: 'Gross Profit', value: formatCurrency(reports?.total_profit ?? 0),  subtitle: `${profitMargin} margin`, icon: <Percent size={20} />, color: 'purple' },
+    { title: 'Avg. Sale',    value: formatCurrency(reports?.avg_sale ?? 0),      subtitle: 'Average ticket', icon: <BarChart3 size={20} />,   color: 'amber'  },
   ]
 
   const isSyncing = rLoading && tick > 0
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-fade-in relative z-10 w-full pb-8">
+    <div ref={pageRef} className="space-y-6 sm:space-y-8 relative z-10 w-full pb-8">
       
       {/* --- Premium Glass Header --- */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5 glass-card p-6 sm:px-8">
+      <div data-gsap-reveal className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5 rounded-lg border border-[#d9d4c8] bg-white p-5 sm:px-6 shadow-sm">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#697773]">Financial Reporting</p>
+          <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
             Finance Reports
           </h2>
-          <p className="text-[#697773] text-sm sm:text-base font-medium mt-1">
-            Revenue, profit, and comprehensive sales analytics
+          <p className="text-[#697773] text-sm sm:text-base font-medium mt-1 flex flex-wrap items-center gap-2">
+            <span>{activeShop?.shop_name ?? 'Selected shop'}</span>
+            <span className="text-[#004643]/50">•</span>
+            <span className="inline-flex items-center gap-1.5"><CalendarDays size={15} /> {periodLabel}</span>
           </p>
         </div>
         
@@ -251,27 +265,27 @@ export default function FinanceReports() {
       </div>
 
       {/* --- Key Metrics Grid --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div data-gsap-reveal className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         {stats.map((s) => (
           <StatCard key={s.title} {...s} loading={rLoading && tick === 0} />
         ))}
       </div>
 
       {/* --- Revenue Chart Section --- */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+      <div data-gsap-reveal className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="xl:col-span-2">
           <RevenueChart data={reports?.daily_revenue ?? []} />
         </div>
         <ProductMixChart data={reports?.top_products ?? []} />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div data-gsap-reveal className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         <ProfitRevenueChart reports={reports} />
         <TopProductsChart data={reports?.top_products ?? []} />
       </div>
 
       {/* --- All Transactions Table Section --- */}
-      <div className="glass-card p-6 sm:p-8">
+      <div data-gsap-reveal className="rounded-lg border border-[#d9d4c8] bg-white p-5 sm:p-6 shadow-sm">
         
         {/* Table Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">

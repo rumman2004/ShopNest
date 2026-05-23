@@ -12,7 +12,7 @@ import Button           from '../../components/ui/Button'
 import SearchBar        from '../../components/ui/SearchBar'
 import ConfirmDialog    from '../../components/ui/ConfirmDialog'
 import EmptyState       from '../../components/ui/EmptyState'
-import { Plus, Store, Package }  from 'lucide-react'
+import { ImagePlus, Plus, Store, Package }  from 'lucide-react'
 
 export default function Inventory() {
   const { activeShop, shopId, setActiveShop } = useShop()
@@ -37,6 +37,15 @@ export default function Inventory() {
       : Promise.resolve(null),
     [shopId, dSearch]
   )
+
+  // ── Fetch categories ──────────────────────────────────────────────
+  const { data: categoryData } = useFetch(
+    () => shopId
+      ? productService.getCategories(shopId)
+      : Promise.resolve(null),
+    [shopId]
+  )
+  const categories = categoryData?.data ?? categoryData ?? []
 
   // ── Detect stale / deleted shop via 403 ───────────────────────────
   useEffect(() => {
@@ -187,19 +196,26 @@ export default function Inventory() {
         isOpen={modal.open}
         onClose={closeModal}
         title={modal.product ? 'Edit Product Details' : 'Add New Product'}
-        size="md"
+        eyebrow="Inventory"
+        description={modal.product ? 'Update product information, pricing, and stock levels.' : 'Create a new product record for the selected shop.'}
+        icon={<Package size={20} />}
+        size="lg"
       >
         <ProductForm
           onSubmit={handleSubmit}
           defaultValues={modal.product}
           loading={saving}
+          categories={categories}
         />
       </Modal>
 
       <Modal
         isOpen={imgModal.open}
         onClose={() => setImgModal({ open: false, product: null })}
-        title={`Upload Image — ${imgModal.product?.product_name ?? ''}`}
+        title="Upload Product Image"
+        eyebrow="Product Media"
+        description={imgModal.product?.product_name ? `Add or replace the image for ${imgModal.product.product_name}.` : 'Add or replace the product image.'}
+        icon={<ImagePlus size={20} />}
         size="sm"
       >
         <ImageUploader

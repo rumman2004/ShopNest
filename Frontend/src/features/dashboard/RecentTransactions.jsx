@@ -7,7 +7,7 @@ export default function RecentTransactions({ transactions = [] }) {
   const validTransactions = Array.isArray(transactions) ? transactions : []
 
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full min-h-[400px]">
       <CardHeader className="border-b border-[#ebe6dc] pb-4">
         <CardTitle className="flex items-center gap-2">
           <FileText size={18} className="text-[#004643]" />
