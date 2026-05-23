@@ -38,7 +38,7 @@ const getCategoriesByShop = async (data) => {
                 c.created_at,
                 COUNT(p.product_id) as product_count
              FROM categories c
-             LEFT JOIN products p ON c.category_id = p.category_id
+             LEFT JOIN products p ON p.shop_id = c.shop_id AND p.category = c.category_name
              WHERE c.shop_id = ?
              GROUP BY c.category_id
              ORDER BY c.category_name`,
@@ -98,7 +98,7 @@ const updateCategory = async (data) => {
     try {
         // Get category and verify access
         const [existingCategory] = await db.execute(
-            'SELECT shop_id FROM categories WHERE category_id = ?',
+            'SELECT shop_id, category_name FROM categories WHERE category_id = ?',
             [category_id]
         );
 
@@ -172,7 +172,7 @@ const deleteCategory = async (data) => {
     try {
         // Get category and verify access
         const [existingCategory] = await db.execute(
-            'SELECT shop_id FROM categories WHERE category_id = ?',
+            'SELECT shop_id, category_name FROM categories WHERE category_id = ?',
             [category_id]
         );
 
@@ -185,8 +185,8 @@ const deleteCategory = async (data) => {
 
         // Check if category has products
         const [productsCheck] = await db.execute(
-            'SELECT COUNT(*) as count FROM products WHERE category_id = ?',
-            [category_id]
+            'SELECT COUNT(*) as count FROM products WHERE shop_id = ? AND category = ?',
+            [shop_id, existingCategory[0].category_name]
         );
 
         if (productsCheck[0].count > 0) {

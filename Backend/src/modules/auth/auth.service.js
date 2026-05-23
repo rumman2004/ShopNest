@@ -218,9 +218,41 @@ const refreshToken = async (token) => {
     }
 };
 
+const changePassword = async ({ user_id, user_type, current_password, new_password }) => {
+    const table = user_type === 'owner' ? 'owners' : user_type === 'cashier' ? 'cashiers' : null;
+    const idColumn = user_type === 'owner' ? 'owner_id' : user_type === 'cashier' ? 'cashier_id' : null;
+
+    if (!table || !idColumn) {
+        throw new ApiError(403, 'Invalid user type');
+    }
+
+    const [users] = await db.execute(
+        `SELECT ${idColumn} AS id, password_hash FROM ${table} WHERE ${idColumn} = ?`,
+        [user_id]
+    );
+
+    if (users.length === 0) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    const isPasswordValid = await bcrypt.compare(current_password, users[0].password_hash);
+    if (!isPasswordValid) {
+        throw new ApiError(401, 'Current password is incorrect');
+    }
+
+    const password_hash = await bcrypt.hash(new_password, 12);
+    await db.execute(
+        `UPDATE ${table} SET password_hash = ? WHERE ${idColumn} = ?`,
+        [password_hash, user_id]
+    );
+
+    return { id: user_id, type: user_type };
+};
+
 module.exports = {
     registerOwner,
     registerCashier,
     login,
-    refreshToken
+    refreshToken,
+    changePassword
 };

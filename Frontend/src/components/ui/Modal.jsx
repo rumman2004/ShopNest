@@ -42,21 +42,20 @@ export default function Modal({
     <div
       ref={overlayRef}
       onClick={(e) => { if (e.target === overlayRef.current) onClose() }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in bg-[#182321]/45 backdrop-blur-sm"
     >
       <div
         className={`
-          glass-strong rounded-2xl w-full animate-scale-in
+          glass-strong rounded-lg w-full animate-scale-in
           ${sizeMap[size] ?? sizeMap.md}
           ${className}
         `}
       >
         {/* Header */}
         {(title || showClose) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#d9d4c8]">
             {title && (
-              <h2 className="text-lg font-semibold text-white">{title}</h2>
+              <h2 className="text-lg font-semibold text-[#182321]">{title}</h2>
             )}
             {showClose && (
               <Button

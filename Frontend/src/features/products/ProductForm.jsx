@@ -83,10 +83,10 @@ export default function ProductForm({
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4 animate-fade-in pb-1">
 
       {/* ─── SECTION 1: GENERAL INFO (Grid Layout for Compactness) ─── */}
-      <div className="p-4 rounded-xl bg-[#085558]/10 border border-[#84BABF]/20 flex flex-col gap-3 shadow-inner">
+      <div className="p-4 rounded-lg bg-[#f7f4ed] border border-[#d9d4c8] flex flex-col gap-3">
         <div className="flex items-center gap-2 mb-1">
-          <Package size={14} className="text-[#84BABF]" />
-          <h3 className="text-[11px] font-bold text-[#84BABF] uppercase tracking-wider">
+          <Package size={14} className="text-[#004643]" />
+          <h3 className="text-[11px] font-bold text-[#004643] uppercase tracking-wider">
             General Information
           </h3>
         </div>
@@ -144,10 +144,10 @@ export default function ProductForm({
       </div>
 
       {/* ─── SECTION 2: PRICING & STOCK (3-Column Grid) ─── */}
-      <div className="p-4 rounded-xl bg-[#085558]/10 border border-[#84BABF]/20 flex flex-col gap-3 shadow-inner">
+      <div className="p-4 rounded-lg bg-[#f7f4ed] border border-[#d9d4c8] flex flex-col gap-3">
         <div className="flex items-center gap-2 mb-1">
-          <Tag size={14} className="text-[#84BABF]" />
-          <h3 className="text-[11px] font-bold text-[#84BABF] uppercase tracking-wider">
+          <Tag size={14} className="text-[#004643]" />
+          <h3 className="text-[11px] font-bold text-[#004643] uppercase tracking-wider">
             Financials & Inventory
           </h3>
         </div>
@@ -199,7 +199,7 @@ export default function ProductForm({
           size="md"
           loading={loading}
           icon={<CheckCircle2 size={18} />}
-          className="shadow-lg shadow-[#006F73]/20 border border-[#006F73]/50"
+          className="border border-[#004643]"
         >
           {defaultValues?.product_id ? 'Save Changes' : 'Add to Inventory'}
         </Button>

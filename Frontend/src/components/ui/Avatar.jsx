@@ -31,7 +31,7 @@ export default function Avatar({ name = '', src, size = 'md', className = '' }) 
       <div 
         className={`
           relative shrink-0 rounded-full overflow-hidden 
-          bg-[#06363D] border border-[#84BABF]/20 shadow-inner
+          bg-white border border-[#d9d4c8] shadow-inner
           ${currentClass} ${className}
         `}
       >
@@ -69,7 +69,7 @@ export default function Avatar({ name = '', src, size = 'md', className = '' }) 
     <div
       className={`
         rounded-full flex items-center justify-center shrink-0
-        bg-[#006F73]/20 border border-[#006F73]/40 text-[#84BABF]
+        bg-[#e5f2f1] border border-[#c8ddda] text-[#004643]
         shadow-inner
         ${currentClass} ${className}
       `}

@@ -72,26 +72,24 @@ function WelcomeOverlay() {
     <div 
       className={`
         fixed inset-0 z-[99999] flex flex-col items-center justify-center
-        bg-[#06363D]/80 backdrop-blur-3xl transition-all duration-700 ease-out
+        bg-[#F0EDE5]/95 backdrop-blur-xl transition-all duration-700 ease-out
         ${isExiting ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'}
       `}
     >
       {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#0B2B26]/30 rounded-full blur-[100px] pointer-events-none" />
-
       <div className="relative z-10 flex flex-col items-center text-center px-6">
         
         {/* Animated Greeting & Icon */}
         <div className="flex items-center gap-3 mb-4 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'both' }}>
           <TimeIcon size={28} className={`${iconColor} drop-shadow-lg`} strokeWidth={2.5} />
-          <span className="text-xl font-bold text-[#84BABF] tracking-widest uppercase">
+          <span className="text-xl font-bold text-[#004643] tracking-widest uppercase">
             {greeting}
           </span>
         </div>
 
         {/* Cashier Name */}
         <h1 
-          className="text-5xl md:text-6xl font-black text-[#E0EDE9] tracking-tight drop-shadow-xl animate-fade-in"
+          className="text-5xl md:text-6xl font-black text-[#182321] tracking-tight animate-fade-in"
           style={{ animationDelay: '300ms', animationFillMode: 'both' }}
         >
           {cashierName}
@@ -99,18 +97,18 @@ function WelcomeOverlay() {
 
         {/* Shop Info */}
         <div 
-          className="mt-6 flex items-center gap-2 bg-[#0B2B26]/50 border border-[#84BABF]/20 px-5 py-2.5 rounded-full shadow-lg animate-fade-in"
+          className="mt-6 flex items-center gap-2 bg-white border border-[#c8ddda] px-5 py-2.5 rounded-full shadow-lg animate-fade-in"
           style={{ animationDelay: '500ms', animationFillMode: 'both' }}
         >
           <Store size={18} className="text-emerald-400" />
-          <span className="font-bold text-emerald-400 tracking-wide">
+          <span className="font-bold text-[#004643] tracking-wide">
             {shopName}
           </span>
         </div>
 
         {/* Date Badge */}
         <div 
-          className="mt-12 text-sm font-semibold text-[#84BABF] tracking-wider uppercase animate-fade-in"
+          className="mt-12 text-sm font-semibold text-[#697773] tracking-wider uppercase animate-fade-in"
           style={{ animationDelay: '700ms', animationFillMode: 'both' }}
         >
           {dateStr}
@@ -133,7 +131,7 @@ export default function CashierLayout() {
       {/* 🌟 Injects the smooth welcome animation on initial load */}
       <WelcomeOverlay />
 
-      <div className="flex h-screen overflow-hidden bg-[#0B2B26]">
+      <div className="flex h-screen overflow-hidden bg-[#F0EDE5] text-[#182321]">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         
         <div className="flex flex-col flex-1 overflow-hidden">

@@ -18,7 +18,7 @@ export const ROUTES = {
   STOCK_CHECK:     '/cashier/stock',
 }
 
-export const API_BASE = import.meta.env.VITE_API_URL
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'
 
 export const SALE_STATUS = {
   COMPLETED: 'completed',
@@ -37,6 +37,6 @@ export const PAGINATION_LIMIT = 10
 
 export const CURRENCY = {
   SYMBOL: '₹',
-  CODE:   'PHP',
-  LOCALE: 'en-PH',
+  CODE:   'INR',
+  LOCALE: 'en-IN',
 }

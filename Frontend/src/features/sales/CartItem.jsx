@@ -6,10 +6,10 @@ export default function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCart()
 
   return (
-    <div className="group flex items-center gap-3 py-3.5 px-2 -mx-2 border-b border-[#84BABF]/10 last:border-0 hover:bg-[#085558]/30 transition-all rounded-xl cursor-default">
+    <div className="group flex items-center gap-3 py-3.5 px-2 -mx-2 border-b border-[#ebe6dc] last:border-0 hover:bg-[#f7f4ed] transition-all rounded-lg cursor-default">
 
       {/* --- Thumbnail --- */}
-      <div className="w-12 h-12 rounded-xl bg-[#006F73]/20 border border-[#006F73]/30 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+      <div className="w-12 h-12 rounded-lg bg-[#f0ede5] border border-[#d9d4c8] flex items-center justify-center shrink-0 overflow-hidden">
         {item.image_url ? (
           <img 
             src={item.image_url} 
@@ -17,38 +17,38 @@ export default function CartItem({ item }) {
             className="w-full h-full object-cover" 
           />
         ) : (
-          <ImageIcon size={20} className="text-[#006F73]/60" />
+          <ImageIcon size={20} className="text-[#9aa39f]" />
         )}
       </div>
 
       {/* --- Product Details --- */}
       <div className="flex-1 min-w-0 flex flex-col justify-center">
-        <p className="text-sm font-bold text-[#E0EDE9] truncate tracking-wide leading-tight">
+        <p className="text-sm font-bold text-[#182321] truncate tracking-wide leading-tight">
           {item.product_name}
         </p>
-        <p className="text-xs text-[#84BABF] font-semibold mt-0.5">
+        <p className="text-xs text-[#697773] font-semibold mt-0.5">
           {formatCurrency(item.price)}
         </p>
       </div>
 
       {/* --- Quantity Controls Pill --- */}
-      <div className="flex items-center gap-1 bg-[#06363D]/60 rounded-lg p-1 border border-[#84BABF]/10 shadow-inner">
+      <div className="flex items-center gap-1 bg-[#f7f4ed] rounded-lg p-1 border border-[#d9d4c8]">
         <button
           onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-          className="w-6 h-6 rounded-md hover:bg-[#006F73]/40 text-[#84BABF] hover:text-[#E0EDE9] flex items-center justify-center transition-all focus:outline-none"
+          className="w-6 h-6 rounded-md hover:bg-[#e5f2f1] text-[#004643] flex items-center justify-center transition-all focus:outline-none"
           title="Decrease quantity"
         >
           <Minus size={14} strokeWidth={2.5} />
         </button>
         
-        <span className="text-sm font-mono font-bold w-6 text-center text-[#E0EDE9]">
+        <span className="text-sm font-mono font-bold w-6 text-center text-[#182321]">
           {item.quantity}
         </span>
         
         <button
           onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
           disabled={item.quantity >= item.stock_quantity}
-          className="w-6 h-6 rounded-md hover:bg-[#006F73]/40 text-[#84BABF] hover:text-[#E0EDE9] flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed focus:outline-none"
+          className="w-6 h-6 rounded-md hover:bg-[#e5f2f1] text-[#004643] flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed focus:outline-none"
           title={item.quantity >= item.stock_quantity ? 'Max stock reached' : 'Increase quantity'}
         >
           <Plus size={14} strokeWidth={2.5} />
@@ -57,7 +57,7 @@ export default function CartItem({ item }) {
 
       {/* --- Line Total --- */}
       <div className="w-16 sm:w-20 text-right shrink-0">
-        <p className="text-sm font-extrabold text-[#E0EDE9] tracking-wide">
+        <p className="text-sm font-extrabold text-[#182321] tracking-wide">
           {formatCurrency(item.price * item.quantity)}
         </p>
       </div>
@@ -65,7 +65,7 @@ export default function CartItem({ item }) {
       {/* --- Remove Action --- */}
       <button
         onClick={() => removeItem(item.product_id)}
-        className="p-2 text-rose-400/60 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all focus:outline-none shrink-0"
+        className="p-2 text-rose-600/70 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-all focus:outline-none shrink-0"
         title="Remove item"
       >
         <Trash2 size={16} strokeWidth={2} />

@@ -54,17 +54,13 @@ export default function CheckoutPanel({ onSuccess }) {
   }
 
   return (
-    <div className="bg-[#085558]/30 border border-[#84BABF]/20 backdrop-blur-xl p-5 sm:p-6 rounded-[2rem] shadow-xl shadow-[#06363D]/50 relative overflow-hidden animate-fade-in">
-      
-      {/* Background ambient glow */}
-      <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-[#006F73]/20 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="glass-card p-5 sm:p-6 relative overflow-hidden animate-fade-in">
       {/* --- Header --- */}
       <div className="flex items-center gap-3 mb-5 relative z-10">
-        <div className="p-2.5 bg-[#006F73]/30 rounded-xl border border-[#006F73]/50 shadow-inner">
-          <CreditCard size={20} className="text-[#84BABF]" />
+        <div className="p-2.5 bg-[#e5f2f1] rounded-lg border border-[#c8ddda]">
+          <CreditCard size={20} className="text-[#004643]" />
         </div>
-        <h3 className="text-xl font-extrabold text-[#E0EDE9] tracking-wide">
+        <h3 className="text-xl font-extrabold text-[#182321] tracking-wide">
           Payment Center
         </h3>
       </div>
@@ -72,11 +68,11 @@ export default function CheckoutPanel({ onSuccess }) {
       <div className="space-y-4 relative z-10">
         
         {/* --- Amount Due Highlight --- */}
-        <div className="bg-[#06363D]/60 border border-[#84BABF]/10 rounded-2xl p-4 flex flex-col justify-center items-center text-center shadow-inner">
-          <span className="text-xs font-bold text-[#84BABF] uppercase tracking-widest mb-1.5">
+        <div className="bg-[#f7f4ed] border border-[#d9d4c8] rounded-lg p-4 flex flex-col justify-center items-center text-center">
+          <span className="text-xs font-bold text-[#697773] uppercase tracking-widest mb-1.5">
             Total Amount Due
           </span>
-          <span className="text-3xl font-black text-[#E0EDE9] tracking-tight drop-shadow-md">
+          <span className="text-3xl font-black text-[#004643] tracking-tight">
             {formatCurrency(totals.total)}
           </span>
         </div>
@@ -91,7 +87,7 @@ export default function CheckoutPanel({ onSuccess }) {
             placeholder="0.00"
             value={tendered}
             onChange={(e) => setTendered(e.target.value)}
-            icon={<Banknote size={18} className="text-[#84BABF]" />}
+            icon={<Banknote size={18} className="text-[#004643]" />}
             disabled={!canCheckout}
           />
         </div>
@@ -102,16 +98,16 @@ export default function CheckoutPanel({ onSuccess }) {
         }`}>
           <div className={`flex justify-between items-center p-3.5 rounded-xl border shadow-inner ${
             isShort 
-              ? 'bg-rose-500/10 border-rose-500/20' 
-              : 'bg-emerald-500/10 border-emerald-500/20'
+              ? 'bg-rose-50 border-rose-200' 
+              : 'bg-emerald-50 border-emerald-200'
           }`}>
             <span className={`text-xs font-bold uppercase tracking-wider ${
-              isShort ? 'text-rose-400' : 'text-emerald-400'
+              isShort ? 'text-rose-700' : 'text-emerald-700'
             }`}>
               {isShort ? 'Remaining Due' : 'Change Due'}
             </span>
             <span className={`text-xl font-extrabold tracking-tight ${
-              isShort ? 'text-rose-400' : 'text-emerald-400'
+              isShort ? 'text-rose-700' : 'text-emerald-700'
             }`}>
               {formatCurrency(Math.abs(change))}
             </span>
@@ -128,8 +124,8 @@ export default function CheckoutPanel({ onSuccess }) {
           disabled={!canCheckout || isShort}
           className={`py-4 mt-2 font-bold text-lg rounded-xl border shadow-lg transition-all ${
             canCheckout && !isShort && !loading
-              ? 'bg-gradient-to-r from-[#006F73] to-[#085558] hover:from-[#008A8F] hover:to-[#0A6C70] border-[#84BABF]/20 text-[#E0EDE9] shadow-[#006F73]/30'
-              : 'bg-[#06363D] border-[#84BABF]/10 text-slate-500 cursor-not-allowed'
+              ? 'bg-[#004643] hover:bg-[#003734] border-[#004643] text-white'
+              : 'bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed'
           }`}
         >
           {loading ? 'Processing...' : 'Complete Sale'}

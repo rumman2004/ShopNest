@@ -1,6 +1,7 @@
 const db         = require('../../config/database');
 const cloudinary = require('../../config/cloudinary');
 const { ApiError } = require('../../utils/ApiError');
+const { logActivity } = require('../activity/activity.service');
 
 // ── Access guard ─────────────────────────────────────────────────
 const verifyShopAccess = async (shop_id, user_id, user_type) => {
@@ -196,6 +197,22 @@ const createProduct = async (data) => {
     [result.insertId]
   );
 
+  // Log activity
+  logActivity({
+    shop_id:     parsedShopId,
+    user_id,
+    user_type,
+    action:      'product_created',
+    entity_id:   result.insertId,
+    entity_name: product_name,
+    details: {
+      price:          toFloat(price),
+      cost_price:     toFloat(cost_price),
+      stock_quantity: toInt(stock_quantity),
+      category:       category || null,
+    },
+  });
+
   return product[0];
 };
 
@@ -210,7 +227,7 @@ const updateProduct = async (data) => {
   const parsedProductId = toInt(product_id);
 
   const [existing] = await db.execute(
-    'SELECT shop_id, image_url FROM products WHERE product_id = ?',
+    'SELECT shop_id, image_url, product_name, price, cost_price, stock_quantity, category FROM products WHERE product_id = ?',
     [parsedProductId]
   );
   if (existing.length === 0) throw new ApiError(404, 'Product not found');
@@ -267,6 +284,25 @@ const updateProduct = async (data) => {
     [parsedProductId]
   );
 
+  // Build a human-readable changes object
+  const changes = {};
+  if (product_name   !== undefined) changes.product_name   = { old: existing[0].product_name,   new: product_name };
+  if (price          !== undefined) changes.price          = { old: existing[0].price,          new: toFloat(price) };
+  if (cost_price     !== undefined) changes.cost_price     = { old: existing[0].cost_price,     new: toFloat(cost_price) };
+  if (stock_quantity !== undefined) changes.stock_quantity = { old: existing[0].stock_quantity, new: toInt(stock_quantity) };
+  if (category       !== undefined) changes.category       = { old: existing[0].category,       new: category || null };
+
+  // Log activity
+  logActivity({
+    shop_id:     shop_id,
+    user_id,
+    user_type,
+    action:      image?.buffer ? 'image_uploaded' : 'product_updated',
+    entity_id:   parsedProductId,
+    entity_name: product[0].product_name,
+    details:     { changes },
+  });
+
   return product[0];
 };
 
@@ -304,6 +340,23 @@ const updateStock = async ({ product_id, stock_quantity, adjustment_type, reason
     [parsedProductId]
   );
 
+  // Log activity
+  logActivity({
+    shop_id:     rows[0].shop_id,
+    user_id,
+    user_type,
+    action:      'stock_adjusted',
+    entity_id:   parsedProductId,
+    entity_name: product[0].product_name,
+    details: {
+      adjustment_type,
+      quantity:  parsedQty,
+      old_stock: current,
+      new_stock: newStock,
+      reason:    reason || null,
+    },
+  });
+
   return product[0];
 };
 
@@ -317,6 +370,13 @@ const deleteProduct = async ({ product_id, user_id, user_type }) => {
   );
   if (rows.length === 0) throw new ApiError(404, 'Product not found');
 
+  // Capture name before deletion
+  const [nameRow] = await db.execute(
+    'SELECT product_name FROM products WHERE product_id = ?',
+    [parsedProductId]
+  );
+  const deletedName = nameRow[0]?.product_name || 'Unknown Product';
+
   await verifyShopAccess(rows[0].shop_id, user_id, user_type);
 
   const [[{ count }]] = await db.execute(
@@ -326,6 +386,17 @@ const deleteProduct = async ({ product_id, user_id, user_type }) => {
   if (count > 0) throw new ApiError(409, 'Cannot delete product with existing sales records');
 
   await db.execute('DELETE FROM products WHERE product_id = ?', [parsedProductId]);
+
+  // Log activity
+  logActivity({
+    shop_id:     rows[0].shop_id,
+    user_id,
+    user_type,
+    action:      'product_deleted',
+    entity_id:   parsedProductId,
+    entity_name: deletedName,
+    details:     { product_name: deletedName },
+  });
 
   if (rows[0].image_url) {
     try {

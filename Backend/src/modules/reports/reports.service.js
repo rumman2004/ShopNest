@@ -230,7 +230,7 @@ const getInventoryReport = async (data) => {
                     ELSE 'Good Stock'
                 END as stock_status
              FROM products p
-             LEFT JOIN categories c ON p.category_id = c.category_id
+             LEFT JOIN categories c ON p.shop_id = c.shop_id AND p.category = c.category_name
              WHERE p.shop_id = ?
              ORDER BY p.stock_quantity ASC, p.product_name`,
             [shop_id]
@@ -369,7 +369,7 @@ const getLowStockReport = async (data) => {
                 END as stock_status,
                 (p.price * p.stock_quantity) as inventory_value
              FROM products p
-             LEFT JOIN categories c ON p.category_id = c.category_id
+             LEFT JOIN categories c ON p.shop_id = c.shop_id AND p.category = c.category_name
              WHERE p.shop_id = ? AND p.stock_quantity <= ?
              ORDER BY p.stock_quantity ASC, p.product_name`,
             [shop_id, threshold]

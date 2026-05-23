@@ -30,7 +30,7 @@ export default function SalesTable({ sales = [], loading }) {
       header: 'Receipt #',
       key:    'sale_id',
       render: (v) => (
-        <span className="font-mono text-sm tracking-wide text-[#E0EDE9]">
+        <span className="font-mono text-sm tracking-wide text-[#004643]">
           #{String(v).slice(-8).toUpperCase()}
         </span>
       ),
@@ -39,7 +39,7 @@ export default function SalesTable({ sales = [], loading }) {
       header: 'Date/Time',
       key:    'sale_date',          
       render: (v) => (
-        <span className="text-sm font-medium text-[#84BABF]">
+        <span className="text-sm font-medium text-[#697773]">
           {formatDateTime(parseExactLocalTime(v))}
         </span>
       ),
@@ -48,21 +48,21 @@ export default function SalesTable({ sales = [], loading }) {
       header: 'Cashier',
       key:    'cashier_name',
       render: (v) => (
-        <span className="text-[#E0EDE9] font-medium">{v || 'System'}</span>
+        <span className="text-[#182321] font-medium">{v || 'System'}</span>
       ),
     },
     {
       header: 'Items',
       key:    'item_count',
       render: (v) => (
-        <span className="text-[#84BABF]">{v} item(s)</span>
+        <span className="text-[#697773]">{v} item(s)</span>
       ),
     },
     {
       header: 'Total',
       key:    'total_amount',
       render: (v) => (
-        <span className="font-bold text-[#E0EDE9]">{formatCurrency(v)}</span>
+        <span className="font-bold text-[#182321]">{formatCurrency(v)}</span>
       ),
     },
     {

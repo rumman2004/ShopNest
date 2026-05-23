@@ -30,21 +30,21 @@ export default function StockCheck() {
       header: 'Product',
       key:    'product_name',
       render: (v) => (
-        <span className="font-semibold text-[#E0EDE9]">{v}</span>
+        <span className="font-semibold text-[#182321]">{v}</span>
       ),
     },
     {
       header: 'Category',
       key:    'category_name',
       render: (v) => (
-        <span className="text-[#84BABF] text-sm">{v || '—'}</span>
+        <span className="text-[#697773] text-sm">{v || '—'}</span>
       ),
     },
     {
       header: 'Price',
       key:    'price',
       render: (v) => (
-        <span className="font-bold text-[#E0EDE9]">{formatCurrency(v)}</span>
+        <span className="font-bold text-[#182321]">{formatCurrency(v)}</span>
       ),
     },
     {
@@ -115,7 +115,7 @@ export default function StockCheck() {
     return (
       <div className="animate-fade-in py-10">
         <EmptyState
-          icon={<Store size={56} className="text-[#84BABF]" />}
+          icon={<Store size={56} className="text-[#697773]" />}
           title="No Shop Selected"
           message="Please select a shop to view inventory stock levels."
         />
@@ -127,13 +127,13 @@ export default function StockCheck() {
     <div className="space-y-6 sm:space-y-8 animate-fade-in pb-8">
       
       {/* --- Premium Glass Header --- */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-5 justify-between bg-[#0B2B26]/20 border border-[#84BABF]/20 p-6 sm:px-8 rounded-[2rem] backdrop-blur-xl shadow-lg shadow-[#06363D]/50">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-5 justify-between bg-[#e5f2f1] border border-[#d9d4c8] p-6 sm:px-8 rounded-[2rem]  shadow-lg shadow-[#d9d4c8]/40">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E0EDE9] tracking-tight flex items-center gap-3">
-            <Package size={28} className="text-[#84BABF] hidden sm:block" />
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
+            <Package size={28} className="text-[#697773] hidden sm:block" />
             Inventory Stock Check
           </h2>
-          <div className="text-[#84BABF] text-sm sm:text-base font-medium mt-2 flex flex-wrap items-center gap-2">
+          <div className="text-[#697773] text-sm sm:text-base font-medium mt-2 flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
               {products.length} Total Products
@@ -169,14 +169,14 @@ export default function StockCheck() {
       </div>
 
       {/* --- Products Table Section --- */}
-      <div className="bg-[#085558]/10 border border-[#84BABF]/20 rounded-[2rem] p-6 sm:p-8 backdrop-blur-xl shadow-lg shadow-[#06363D]/30">
+      <div className="bg-[#e5f2f1] border border-[#d9d4c8] rounded-[2rem] p-6 sm:p-8  shadow-lg shadow-[#d9d4c8]/30">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2.5 bg-[#006F73]/20 rounded-xl border border-[#006F73]/30">
-            <Package size={20} className="text-[#84BABF]" />
+          <div className="p-2.5 bg-[#e5f2f1] rounded-xl border border-[#004643]/20">
+            <Package size={20} className="text-[#697773]" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#E0EDE9] tracking-wide">Product Inventory</h3>
-            <p className="text-sm text-[#84BABF] mt-0.5">Real-time stock levels and availability status.</p>
+            <h3 className="text-xl font-bold text-[#182321] tracking-wide">Product Inventory</h3>
+            <p className="text-sm text-[#697773] mt-0.5">Real-time stock levels and availability status.</p>
           </div>
         </div>
         

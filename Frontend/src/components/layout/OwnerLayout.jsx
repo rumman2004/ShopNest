@@ -17,7 +17,7 @@ export default function OwnerLayout() {
   const title = PAGE_TITLES[pathname] || 'ShopNest'
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-[#F0EDE5] text-[#182321]">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-col flex-1 overflow-hidden">
         <Navbar

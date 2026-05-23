@@ -154,19 +154,15 @@ const deleteShop = async ({ shop_id, owner_id }) => {
 };
 
 const activateShop = async ({ shop_id, owner_id }) => {
-  console.log('activateShop called with:', { shop_id, owner_id }); // 🔥 Debug
-
   const [shop] = await db.execute(
     'SELECT * FROM shops WHERE shop_id = ? AND owner_id = ?',
     [shop_id, owner_id]
   );
 
   if (shop.length === 0) {
-    console.log('Shop not found or not owned by user'); // 🔥 Debug
     throw new ApiError(404, 'Shop not found or you do not own it');
   }
 
-  console.log('Attempting to insert/update user_shop_selections'); // 🔥 Debug
   await db.execute(
     `INSERT INTO user_shop_selections (user_id, active_shop_id)
      VALUES (?, ?)

@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export const useFetch = (fetchFn, deps = [], immediate = true) => {
   const [data,    setData]    = useState(null)
   const [loading, setLoading] = useState(immediate)
   const [error,   setError]   = useState(null)
-  const abortRef = useRef(null)
 
   const execute = useCallback(async (...args) => {
     setLoading(true)
@@ -23,7 +22,6 @@ export const useFetch = (fetchFn, deps = [], immediate = true) => {
 
   useEffect(() => {
     if (immediate) execute()
-    return () => abortRef.current?.abort()
   }, [execute]) // eslint-disable-line
 
   const refetch = useCallback(() => execute(), [execute])

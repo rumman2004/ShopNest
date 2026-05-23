@@ -12,7 +12,7 @@ import SearchBar         from '../../components/ui/SearchBar'
 import Button            from '../../components/ui/Button'
 import Modal             from '../../components/ui/Modal'
 import EmptyState        from '../../components/ui/EmptyState'
-import { Trash2, Receipt, Store, ShoppingCart } from 'lucide-react'
+import { Trash2, Receipt, Store, ShoppingCart, Search, PanelRightOpen } from 'lucide-react'
 
 export default function PosTerminal() {
   const { shopId } = useShop()
@@ -21,6 +21,7 @@ export default function PosTerminal() {
   const [search, setSearch]           = useState('')
   const [lastSale, setLastSale]       = useState(null)
   const [showReceipt, setShowReceipt] = useState(false)
+  const [cartOpen, setCartOpen]       = useState(false)
   const dSearch = useDebounce(search, 300)
 
   const { data, loading } = useFetch(
@@ -35,6 +36,7 @@ export default function PosTerminal() {
   const handleSuccess = (sale) => {
     setLastSale(sale)
     setShowReceipt(true)
+    setCartOpen(false)
     clearCart()
   }
 
@@ -43,7 +45,7 @@ export default function PosTerminal() {
     return (
       <div className="animate-fade-in py-10">
         <EmptyState
-          icon={<Store size={56} className="text-[#84BABF]" />}
+          icon={<Store size={56} className="text-[#004643]" />}
           title="No Shop Selected"
           message="Please select a shop to use the POS terminal."
         />
@@ -52,14 +54,14 @@ export default function PosTerminal() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5 lg:gap-6 h-[calc(100vh-7rem)] animate-fade-in pb-4">
+    <div className="flex flex-col lg:flex-row gap-5 lg:gap-6 min-h-[calc(100vh-7rem)] lg:h-[calc(100vh-7rem)] animate-fade-in pb-24 lg:pb-4">
 
       {/* --- Left: Products Panel --- */}
-      <div className="flex-1 flex flex-col gap-5 min-w-0 bg-[#06363D]/40 border border-[#84BABF]/10 rounded-[2rem] p-4 sm:p-6 backdrop-blur-xl shadow-lg shadow-[#06363D]/30">
+      <div className="flex-1 flex flex-col gap-5 min-w-0 glass-card p-4 sm:p-6">
         
         {/* Top Search Bar */}
-        <div className="flex items-center gap-4 shrink-0">
-          <div className="flex-1">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 shrink-0">
+          <div className="flex-1 min-w-0">
             <SearchBar
               value={search}
               onChange={setSearch}
@@ -67,9 +69,9 @@ export default function PosTerminal() {
               className="w-full shadow-inner"
             />
           </div>
-          <div className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-[#085558]/40 border border-[#006F73]/50 rounded-xl">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
-            <span className="text-xs font-bold text-[#84BABF] uppercase tracking-wider whitespace-nowrap">
+          <div className="flex items-center gap-2 px-4 py-2.5 bg-[#e5f2f1] border border-[#c8ddda] rounded-lg">
+            <Search size={15} className="text-[#004643]" />
+            <span className="text-xs font-bold text-[#004643] uppercase tracking-wider whitespace-nowrap">
               {products.length} Items
             </span>
           </div>
@@ -86,29 +88,41 @@ export default function PosTerminal() {
       </div>
 
       {/* --- Right: Cart & Checkout Panel --- */}
-      <div className="w-full lg:w-[360px] xl:w-[400px] flex flex-col gap-5 shrink-0 min-h-0">
+      <div className={`
+        fixed inset-x-0 bottom-0 z-40 lg:static lg:z-auto
+        w-full lg:w-[380px] xl:w-[420px] flex flex-col gap-5 shrink-0 min-h-0
+        bg-[#F0EDE5] lg:bg-transparent p-3 lg:p-0 border-t border-[#d9d4c8] lg:border-0
+        ${cartOpen ? 'max-h-[88vh]' : 'max-h-[92px] lg:max-h-none'} overflow-hidden transition-all duration-300
+      `}>
 
         {/* Cart Items Area */}
-        <div className="bg-[#085558]/20 border border-[#84BABF]/20 backdrop-blur-xl rounded-[2rem] p-5 sm:p-6 shadow-lg flex flex-col flex-1 min-h-[300px] lg:min-h-0 overflow-hidden">
+        <div className="glass-card p-5 sm:p-6 flex flex-col flex-1 min-h-[300px] lg:min-h-0 overflow-hidden">
           
           {/* Cart Header */}
-          <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#84BABF]/10 shrink-0">
+          <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#ebe6dc] shrink-0">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-[#006F73]/20 rounded-xl border border-[#006F73]/30">
-                <ShoppingCart size={18} className="text-[#84BABF]" />
+              <div className="p-2 bg-[#e5f2f1] rounded-lg border border-[#c8ddda]">
+                <ShoppingCart size={18} className="text-[#004643]" />
               </div>
-              <h3 className="text-lg font-bold text-[#E0EDE9] tracking-wide">
+              <h3 className="text-lg font-bold text-[#182321] tracking-wide">
                 Current Order
               </h3>
-              <span className="px-2.5 py-0.5 bg-[#006F73]/30 text-[#E0EDE9] text-xs font-bold rounded-lg border border-[#006F73]/50 shadow-inner">
+              <span className="px-2.5 py-0.5 bg-[#004643] text-white text-xs font-bold rounded-lg border border-[#004643]">
                 {totals.itemCount}
               </span>
             </div>
+            <button
+              onClick={() => setCartOpen((value) => !value)}
+              className="lg:hidden p-2 rounded-lg text-[#004643] hover:bg-[#e5f2f1]"
+              aria-label="Toggle cart"
+            >
+              <PanelRightOpen size={18} />
+            </button>
             
             {totals.itemCount > 0 && (
               <button
                 onClick={clearCart}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-all border border-transparent hover:border-rose-500/20 focus:outline-none"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-50 rounded-lg transition-all border border-transparent hover:border-rose-200 focus:outline-none"
               >
                 <Trash2 size={14} />
                 Clear
@@ -120,9 +134,9 @@ export default function PosTerminal() {
           <div className="flex-1 overflow-y-auto no-scrollbar pr-1 relative">
             {totals.itemCount === 0 ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 opacity-70">
-                <ShoppingCart size={48} className="text-[#006F73]/50 mb-4" />
-                <p className="text-sm font-semibold text-[#84BABF]">Your cart is empty</p>
-                <p className="text-xs text-[#006F73] mt-1.5 max-w-[200px]">Scan or tap products on the left to add them to the order.</p>
+                <ShoppingCart size={48} className="text-[#c8ddda] mb-4" />
+                <p className="text-sm font-semibold text-[#697773]">Your cart is empty</p>
+                <p className="text-xs text-[#697773] mt-1.5 max-w-[220px]">Scan or tap products to add them to the order.</p>
               </div>
             ) : (
               <CartSummary />
@@ -140,7 +154,7 @@ export default function PosTerminal() {
               variant="outline"
               icon={<Receipt size={16} />}
               onClick={() => setShowReceipt(true)}
-              className="w-full border-[#006F73]/50 text-[#84BABF] hover:text-[#E0EDE9] hover:bg-[#006F73]/20 transition-all shadow-md py-3"
+              className="w-full py-3"
             >
               View Last Receipt
             </Button>

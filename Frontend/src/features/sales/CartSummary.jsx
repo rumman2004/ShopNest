@@ -25,12 +25,12 @@ export default function CartSummary() {
       </div>
 
       {items.length > 0 && (
-        <div className="border-t border-white/8 pt-4 mt-4 space-y-2">
-          <div className="flex justify-between text-sm text-slate-400">
+        <div className="border-t border-[#ebe6dc] pt-4 mt-4 space-y-2">
+          <div className="flex justify-between text-sm text-[#697773]">
             <span>Items ({totals.itemCount})</span>
             <span>{formatCurrency(totals.subtotal)}</span>
           </div>
-          <div className="flex justify-between text-base font-bold text-white">
+          <div className="flex justify-between text-base font-bold text-[#182321]">
             <span>Total</span>
             <span className="gradient-text-blue">{formatCurrency(totals.total)}</span>
           </div>

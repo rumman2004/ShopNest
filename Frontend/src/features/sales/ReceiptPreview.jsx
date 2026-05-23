@@ -187,28 +187,28 @@ export default function ReceiptPreview({ sale }) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#085558]/10 rounded-2xl animate-fade-in">
+    <div className="flex flex-col h-full bg-[#f7f4ed] rounded-lg animate-fade-in">
       
       {/* --- Digital Receipt Ticket --- */}
       <div className="flex-1 overflow-y-auto no-scrollbar p-2 mb-4">
-        <div className="bg-[#06363D] border border-[#84BABF]/20 rounded-xl p-5 sm:p-6 shadow-xl relative font-mono text-sm">
+        <div className="bg-white border border-[#d9d4c8] rounded-lg p-5 sm:p-6 shadow-xl relative font-mono text-sm">
           
           {/* Top Zig-Zag or shadow decoration */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-t-xl" />
 
           {/* Header */}
-          <div className="text-center pb-5 border-b border-dashed border-[#84BABF]/30 space-y-1.5">
+          <div className="text-center pb-5 border-b border-dashed border-[#d9d4c8] space-y-1.5">
             <div className="flex justify-center mb-2">
-              <div className="p-2 bg-[#006F73]/20 rounded-full border border-[#006F73]/40">
-                <Store size={24} className="text-[#84BABF]" />
+              <div className="p-2 bg-[#e5f2f1] rounded-full border border-[#c8ddda]">
+                <Store size={24} className="text-[#004643]" />
               </div>
             </div>
-            <h2 className="text-xl font-black text-[#E0EDE9] tracking-widest uppercase">
+            <h2 className="text-xl font-black text-[#182321] tracking-widest uppercase">
               {displayShopName}
             </h2>
-            <p className="text-xs text-[#84BABF] uppercase tracking-wider font-bold">Official Receipt</p>
+            <p className="text-xs text-[#697773] uppercase tracking-wider font-bold">Official Receipt</p>
             
-            <div className="pt-2 text-xs text-slate-400 space-y-0.5">
+            <div className="pt-2 text-xs text-[#697773] space-y-0.5">
               <p>{sale.sale_date ? formatDateTime(sale.sale_date) : '—'}</p>
               <p>Receipt #{String(sale.sale_id ?? '').padStart(8, '0')}</p>
               {sale.cashier_name && <p>Cashier: {sale.cashier_name}</p>}
@@ -216,19 +216,19 @@ export default function ReceiptPreview({ sale }) {
           </div>
 
           {/* Items */}
-          <div className="py-4 space-y-3 border-b border-dashed border-[#84BABF]/30">
+          <div className="py-4 space-y-3 border-b border-dashed border-[#d9d4c8]">
             {sale.items?.map((item, i) => {
               const qty       = Number(item.quantity || 0)
               const unitPrice = Number(item.unit_price || 0)
               const lineTotal = qty * unitPrice
               
               return (
-                <div key={i} className="flex flex-col gap-0.5 text-xs text-[#E0EDE9]">
+                <div key={i} className="flex flex-col gap-0.5 text-xs text-[#182321]">
                   <div className="flex justify-between font-bold">
                     <span className="flex-1 pr-2 truncate">{item.product_name}</span>
                     <span>{formatCurrency(lineTotal)}</span>
                   </div>
-                  <span className="text-slate-400">
+                  <span className="text-[#697773]">
                     {qty} x {formatCurrency(unitPrice)}
                   </span>
                 </div>
@@ -238,18 +238,18 @@ export default function ReceiptPreview({ sale }) {
 
           {/* Totals */}
           <div className="pt-4 space-y-2">
-            <div className="flex justify-between text-lg font-black text-[#E0EDE9]">
+            <div className="flex justify-between text-lg font-black text-[#182321]">
               <span>TOTAL</span>
-              <span className="text-emerald-400">{formatCurrency(totalAmount)}</span>
+              <span className="text-[#004643]">{formatCurrency(totalAmount)}</span>
             </div>
             
             {tenderedAmount > 0 && (
               <div className="pt-2 space-y-1">
-                <div className="flex justify-between text-xs text-slate-400 font-bold">
+                <div className="flex justify-between text-xs text-[#697773] font-bold">
                   <span>Tendered</span>
                   <span>{formatCurrency(tenderedAmount)}</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-[#84BABF]">
+                <div className="flex justify-between text-sm font-bold text-[#004643]">
                   <span>Change</span>
                   <span>{formatCurrency(Math.max(0, change))}</span>
                 </div>
@@ -258,7 +258,7 @@ export default function ReceiptPreview({ sale }) {
           </div>
 
           {/* Footer message */}
-          <div className="mt-8 text-center text-xs text-slate-500">
+          <div className="mt-8 text-center text-xs text-[#697773]">
             <CheckCircle size={16} className="mx-auto mb-2 text-emerald-500/50" />
             <p>Thank you for your purchase!</p>
           </div>
@@ -273,7 +273,7 @@ export default function ReceiptPreview({ sale }) {
           icon={isPrinting ? null : <Printer size={18} />}
           onClick={handlePrint}
           disabled={isPrinting}
-          className="bg-[#006F73] hover:bg-[#085558] text-[#E0EDE9] font-bold text-base py-3 rounded-xl shadow-lg border border-[#006F73]/50 transition-all"
+          className="font-bold text-base py-3"
         >
           {isPrinting ? 'Preparing Print...' : 'Print Receipt'}
         </Button>

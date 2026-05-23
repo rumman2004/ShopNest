@@ -93,7 +93,7 @@ export default function LoginForm({ role = 'owner' }) {
             label="Email address"
             type="email"
             placeholder="you@example.com"
-            icon={<Mail size={18} className="text-[#84BABF]" />}
+            icon={<Mail size={18} className="text-[#004643]" />}
             error={errors.email?.message}
             {...register('email', {
               required: 'Email is required',
@@ -105,7 +105,7 @@ export default function LoginForm({ role = 'owner' }) {
             label="Username"
             type="text"
             placeholder="Your username"
-            icon={<User size={18} className="text-[#84BABF]" />}
+            icon={<User size={18} className="text-[#004643]" />}
             error={errors.username?.message}
             {...register('username', {
               required: 'Username is required',
@@ -118,12 +118,12 @@ export default function LoginForm({ role = 'owner' }) {
           label="Password"
           type={showPwd ? 'text' : 'password'}
           placeholder="••••••••"
-          icon={<Lock size={18} className="text-[#84BABF]" />}
+          icon={<Lock size={18} className="text-[#004643]" />}
           iconRight={
             <button
               type="button"
               onClick={() => setShowPwd((p) => !p)}
-              className="p-1.5 rounded-lg text-[#84BABF] hover:text-[#E0EDE9] hover:bg-[#085558]/40 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#006F73]"
+              className="p-1.5 rounded-lg text-[#697773] hover:text-[#004643] hover:bg-[#e5f2f1] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#004643]"
               title={showPwd ? "Hide password" : "Show password"}
             >
               {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -144,9 +144,9 @@ export default function LoginForm({ role = 'owner' }) {
         loading={isSubmitting}
         size="lg"
         icon={!isSubmitting && <LogIn size={18} />}
-        className="mt-2 shadow-[0_0_20px_rgba(0,111,115,0.25)] hover:shadow-[0_0_30px_rgba(0,111,115,0.4)] border border-[#84BABF]/20 transition-all duration-300"
+        className="mt-2 transition-all duration-300"
       >
-        <span className="tracking-wide font-semibold text-[#E0EDE9]">
+        <span className="tracking-wide font-semibold text-white">
           Sign In as {role === 'owner' ? 'Owner' : 'Cashier'}
         </span>
       </Button>

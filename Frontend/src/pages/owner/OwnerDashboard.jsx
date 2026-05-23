@@ -8,6 +8,7 @@ import StatCard             from '../../components/ui/StatCard'
 import RevenueChart         from '../../features/dashboard/RevenueChart'
 import TopProductsChart     from '../../features/dashboard/TopProductsChart'
 import RecentTransactions   from '../../features/dashboard/RecentTransactions'
+import ActivityFeed         from '../../features/dashboard/ActivityFeed'
 import EmptyState           from '../../components/ui/EmptyState'
 import Spinner              from '../../components/ui/Spinner'
 import Button               from '../../components/ui/Button'
@@ -103,7 +104,7 @@ export default function OwnerDashboard() {
   if (!shopId) {
     return (
       <EmptyState
-        icon={<Store size={56} className="text-[#84BABF]" />}
+        icon={<Store size={56} className="text-[#697773]" />}
         title="No Shop Selected"
         message="Go to Manage Shops and click 'Select Store' on a shop to see your dashboard."
       />
@@ -116,21 +117,21 @@ export default function OwnerDashboard() {
     <div className="space-y-6 sm:space-y-8 animate-fade-in relative z-10 w-full pb-8">
       
       {/* --- Premium Glass Header --- */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 bg-[#0B2B26]/20 border border-[#84BABF]/20 p-6 sm:px-8 rounded-[2rem] backdrop-blur-xl shadow-lg shadow-[#06363D]/50">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 bg-[#e5f2f1] border border-[#d9d4c8] p-6 sm:px-8 rounded-[2rem]  shadow-lg shadow-[#d9d4c8]/40">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E0EDE9] tracking-tight flex items-center gap-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-2">
             Good {getTimeOfDay()},{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E0EDE9] to-[#84BABF]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#004643] to-[#0f766e]">
               {user?.full_name?.split(' ')[0] ?? 'Owner'}
-            </span> 👋
+            </span>
           </h2>
-          <div className="flex items-center gap-2.5 mt-2 text-[#84BABF] text-sm sm:text-base font-medium">
+          <div className="flex items-center gap-2.5 mt-2 text-[#697773] text-sm sm:text-base font-medium">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
             </span>
-            <span className="text-[#E0EDE9] drop-shadow-sm">{activeShop?.shop_name}</span>
-            <span className="text-[#006F73] opacity-60">•</span>
+            <span className="text-[#182321] drop-shadow-sm">{activeShop?.shop_name}</span>
+            <span className="text-[#004643] opacity-60">•</span>
             <span>Last 30 days overview</span>
           </div>
         </div>
@@ -138,7 +139,7 @@ export default function OwnerDashboard() {
         <Button 
           variant="secondary" 
           size="md" 
-          icon={<RefreshCw size={18} className={isSyncing ? "animate-spin text-[#E0EDE9]" : ""} />} 
+          icon={<RefreshCw size={18} className={isSyncing ? "animate-spin text-[#182321]" : ""} />} 
           onClick={() => setTick(t => t + 1)}
           disabled={loading}
           className="shadow-md shrink-0"
@@ -156,9 +157,9 @@ export default function OwnerDashboard() {
 
       {/* --- Loading State OR Dashboard Content --- */}
       {loading && tick === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 bg-[#085558]/10 border border-[#84BABF]/10 rounded-[2rem] backdrop-blur-sm shadow-inner">
-          <Spinner size="lg" className="text-[#006F73] mb-5" />
-          <p className="text-[#84BABF] font-medium animate-pulse tracking-wide">
+        <div className="flex flex-col items-center justify-center py-24 bg-[#e5f2f1] border border-[#ebe6dc] rounded-[2rem]  shadow-sm">
+          <Spinner size="lg" className="text-[#004643] mb-5" />
+          <p className="text-[#697773] font-medium animate-pulse tracking-wide">
             Gathering your store insights...
           </p>
         </div>
@@ -174,9 +175,10 @@ export default function OwnerDashboard() {
             </div>
           </div>
 
-          {/* Recent Transactions Table */}
-          <div className="w-full">
+          {/* Recent Transactions + Activity Feed */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <RecentTransactions transactions={reports?.recent_sales ?? []} />
+            <ActivityFeed />
           </div>
         </>
       )}

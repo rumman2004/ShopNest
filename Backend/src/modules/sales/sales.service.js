@@ -142,11 +142,28 @@ const createSale = async (data) => {
         }
 
         let total_amount = 0;
-        const validatedItems = [];
+        const itemMap = new Map();
 
         for (const item of items) {
+            const productId = Number(item.product_id);
+            const existing = itemMap.get(productId);
+            if (existing) {
+                existing.quantity += Number(item.quantity);
+                if (item.unit_price !== undefined) existing.unit_price = item.unit_price;
+            } else {
+                itemMap.set(productId, {
+                    product_id: productId,
+                    quantity: Number(item.quantity),
+                    unit_price: item.unit_price,
+                });
+            }
+        }
+
+        const validatedItems = [];
+
+        for (const item of itemMap.values()) {
             const [product] = await connection.execute(
-                'SELECT product_id, product_name, price, stock_quantity FROM products WHERE product_id = ? AND shop_id = ?',
+                'SELECT product_id, product_name, price, stock_quantity FROM products WHERE product_id = ? AND shop_id = ? FOR UPDATE',
                 [item.product_id, shop_id]
             );
 
@@ -189,8 +206,8 @@ const createSale = async (data) => {
                 [sale_id, item.product_id, item.quantity, item.unit_price, item.subtotal]
             );
             await connection.execute(
-                'UPDATE products SET stock_quantity = ? WHERE product_id = ?',
-                [item.current_stock - item.quantity, item.product_id]
+                'UPDATE products SET stock_quantity = stock_quantity - ? WHERE product_id = ?',
+                [item.quantity, item.product_id]
             );
         }
 

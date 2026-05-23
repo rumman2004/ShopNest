@@ -37,7 +37,7 @@ export default function ShopSelector({ shops = [], className = '' }) {
 
   return (
     <div className={`relative group ${className}`}>
-      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#84BABF] group-hover:text-[#E0EDE9] transition-colors z-10">
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#697773] group-hover:text-[#182321] transition-colors z-10">
         <Store size={16} strokeWidth={2.5} />
       </div>
 
@@ -46,7 +46,7 @@ export default function ShopSelector({ shops = [], className = '' }) {
         value={activeShop?.shop_id ?? ''}
         onChange={handleChange}
         placeholder="Select a shop…"
-        className="pl-10 bg-[#085558]/20 border-[#84BABF]/30 text-[#E0EDE9] hover:bg-[#085558]/40 hover:border-[#84BABF]/60 transition-all duration-300 shadow-inner w-full"
+        className="pl-10 bg-[#e5f2f1] border-[#d9d4c8] text-[#182321] hover:bg-[#e5f2f1] hover:border-[#004643]/30 transition-all duration-300 shadow-sm w-full"
       />
     </div>
   )

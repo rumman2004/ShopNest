@@ -39,7 +39,7 @@ export function CardHeader({ children, className = '' }) {
 
 export function CardTitle({ children, className = '' }) {
   return (
-    <h3 className={`text-base font-semibold text-white/90 ${className}`}>
+    <h3 className={`text-base font-semibold text-[#182321] ${className}`}>
       {children}
     </h3>
   )

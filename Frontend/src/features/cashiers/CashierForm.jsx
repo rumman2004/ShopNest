@@ -39,12 +39,12 @@ export default function CashierForm({ onSubmit, defaultValues, loading }) {
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-5 animate-fade-in">
       
       {/* ─── CASHIER DETAILS CARD ─── */}
-      <div className="p-5 rounded-2xl bg-[#085558]/10 border border-[#84BABF]/20 space-y-4 shadow-inner">
+      <div className="p-5 rounded-2xl bg-[#e5f2f1] border border-[#d9d4c8] space-y-4 shadow-sm">
         
         {/* Section Header */}
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[#84BABF]/10">
-          <UserPlus size={18} className="text-[#84BABF]" />
-          <h3 className="text-sm font-semibold text-[#E0EDE9] uppercase tracking-widest">
+        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[#ebe6dc]">
+          <UserPlus size={18} className="text-[#697773]" />
+          <h3 className="text-sm font-semibold text-[#182321] uppercase tracking-widest">
             {isEdit ? 'Edit Profile' : 'Staff Profile'}
           </h3>
         </div>
@@ -74,10 +74,10 @@ export default function CashierForm({ onSubmit, defaultValues, loading }) {
 
       {/* ─── SECURITY SECTION (Only for New Cashiers) ─── */}
       {!isEdit && (
-        <div className="p-5 rounded-2xl bg-[#085558]/10 border border-[#84BABF]/20 space-y-4 shadow-inner">
+        <div className="p-5 rounded-2xl bg-[#e5f2f1] border border-[#d9d4c8] space-y-4 shadow-sm">
           <div className="flex items-center gap-2 mb-1">
-            <Shield size={18} className="text-[#84BABF]" />
-            <h3 className="text-sm font-semibold text-[#E0EDE9] uppercase tracking-widest">
+            <Shield size={18} className="text-[#697773]" />
+            <h3 className="text-sm font-semibold text-[#182321] uppercase tracking-widest">
               Security
             </h3>
           </div>
@@ -92,14 +92,14 @@ export default function CashierForm({ onSubmit, defaultValues, loading }) {
               minLength: { value: 6, message: 'Minimum 6 characters' }
             })}
           />
-          <p className="text-[10px] text-[#84BABF]/80 px-1">
+          <p className="text-[10px] text-[#697773]/80 px-1">
             Provide this temporary password to the cashier. They will use it to log into the POS terminal.
           </p>
         </div>
       )}
 
       {/* ─── ACTION BUTTON ─── */}
-      <div className="pt-3 pb-1 sticky bottom-0 bg-[#06363D]/80 backdrop-blur-md z-10 -mx-2 px-2">
+      <div className="pt-3 pb-1 sticky bottom-0 bg-[#faf8f2]/80  z-10 -mx-2 px-2">
         <Button 
           type="submit" 
           variant="primary" 
@@ -107,7 +107,7 @@ export default function CashierForm({ onSubmit, defaultValues, loading }) {
           size="lg"
           loading={loading}
           icon={<CheckCircle2 size={18} />}
-          className="shadow-[0_0_20px_rgba(0,111,115,0.3)] border border-[#84BABF]/30"
+          className="shadow-[0_0_20px_rgba(0,111,115,0.3)] border border-[#d9d4c8]"
         >
           {isEdit ? 'Save Changes' : 'Create Cashier Account'}
         </Button>

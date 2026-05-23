@@ -73,12 +73,12 @@ export default function ManageShops() {
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-fade-in relative z-10 w-full pb-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 bg-[#0B2B26]/20 border border-[#84BABF]/20 p-6 sm:px-8 rounded-[2rem] backdrop-blur-xl shadow-lg shadow-[#06363D]/50">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 bg-[#e5f2f1] border border-[#d9d4c8] p-6 sm:px-8 rounded-[2rem]  shadow-lg shadow-[#d9d4c8]/40">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E0EDE9] tracking-tight flex items-center gap-3">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
             Manage Shops
           </h2>
-          <p className="text-[#84BABF] text-sm sm:text-base font-medium mt-1">
+          <p className="text-[#697773] text-sm sm:text-base font-medium mt-1">
             {shops.length} shop{shops.length !== 1 ? 's' : ''} currently registered
           </p>
         </div>
@@ -94,14 +94,14 @@ export default function ManageShops() {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-24 bg-[#085558]/10 border border-[#84BABF]/10 rounded-[2rem] backdrop-blur-sm shadow-inner">
-          <Spinner size="lg" className="text-[#006F73] mb-5" />
-          <p className="text-[#84BABF] font-medium animate-pulse tracking-wide">Loading your stores...</p>
+        <div className="flex flex-col items-center justify-center py-24 bg-[#e5f2f1] border border-[#ebe6dc] rounded-[2rem]  shadow-sm">
+          <Spinner size="lg" className="text-[#004643] mb-5" />
+          <p className="text-[#697773] font-medium animate-pulse tracking-wide">Loading your stores...</p>
         </div>
       ) : shops.length === 0 ? (
-        <div className="bg-[#085558]/10 border border-[#84BABF]/20 rounded-[2rem] p-10 backdrop-blur-xl shadow-lg shadow-[#06363D]/30">
+        <div className="bg-[#e5f2f1] border border-[#d9d4c8] rounded-[2rem] p-10  shadow-lg shadow-[#d9d4c8]/30">
           <EmptyState
-            icon={<Store size={56} className="text-[#84BABF]" />}
+            icon={<Store size={56} className="text-[#697773]" />}
             title="No Shops Yet"
             message="Create your first shop to get started and unlock your dashboard."
             action={

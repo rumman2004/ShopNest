@@ -8,6 +8,7 @@ const categoriesRoutes = require('../modules/categories/categories.routes');
 const productsRoutes   = require('../modules/products/products.routes');
 const salesRoutes      = require('../modules/sales/sales.routes');
 const reportsRoutes    = require('../modules/reports/reports.routes');
+const activityRoutes   = require('../modules/activity/activity.routes');
 
 const router = express.Router();
 
@@ -120,5 +121,6 @@ router.use('/cashiers', cashiersRoutes);
 router.use('/categories', categoriesRoutes);
 router.use('/sales', salesRoutes);
 router.use('/reports', reportsRoutes);
+router.use('/shops/:shop_id/activity', activityRoutes);
 
 module.exports = router;

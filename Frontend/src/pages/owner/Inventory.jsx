@@ -126,7 +126,7 @@ export default function Inventory() {
   if (!shopId) {
     return (
       <EmptyState
-        icon={<Store size={56} className="text-[#84BABF]" />}
+        icon={<Store size={56} className="text-[#697773]" />}
         title="No Shop Selected"
         message="Please select a shop first from the Manage Shops page to view and edit your inventory."
       />
@@ -137,15 +137,15 @@ export default function Inventory() {
     <div className="space-y-6 sm:space-y-8 animate-fade-in relative z-10 w-full pb-8">
 
       {/* --- Premium Glass Header --- */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 bg-[#0B2B26]/20 border border-[#84BABF]/20 p-6 sm:px-8 rounded-[2rem] backdrop-blur-xl shadow-lg shadow-[#06363D]/50">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 bg-[#e5f2f1] border border-[#d9d4c8] p-6 sm:px-8 rounded-[2rem]  shadow-lg shadow-[#d9d4c8]/40">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E0EDE9] tracking-tight flex items-center gap-3">
-            <Package size={28} className="text-[#84BABF] hidden sm:block" />
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
+            <Package size={28} className="text-[#697773] hidden sm:block" />
             Inventory Management
           </h2>
-          <div className="flex items-center gap-2 mt-2 text-[#84BABF] text-sm sm:text-base font-medium">
-            <span className="text-[#E0EDE9] drop-shadow-sm">{shopLabel}</span>
-            <span className="text-[#006F73] opacity-60">•</span>
+          <div className="flex items-center gap-2 mt-2 text-[#697773] text-sm sm:text-base font-medium">
+            <span className="text-[#182321] drop-shadow-sm">{shopLabel}</span>
+            <span className="text-[#004643] opacity-60">•</span>
             <span>{products.length} product{products.length !== 1 ? 's' : ''} total</span>
           </div>
         </div>

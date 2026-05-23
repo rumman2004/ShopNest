@@ -26,9 +26,17 @@ export default function RegisterForm() {
 
   const onSubmit = async (data) => {
     try {
-      const { confirm_password, ...payload } = data
+      const payload = { ...data }
+      delete payload.confirm_password
       const res = await authService.registerOwner(payload)
-      login(res.user, res.token)
+      const userData = res.data?.user || res.user
+      const tokenData = res.data?.accessToken || res.accessToken || res.token
+
+      if (!userData || !tokenData) {
+        throw new Error('Invalid response from server')
+      }
+
+      login(userData, tokenData)
       toast.success('Account created successfully!')
       navigate('/owner/dashboard', { replace: true })
     } catch (err) {
@@ -43,7 +51,7 @@ export default function RegisterForm() {
         <Input
           label="Full Name"
           placeholder="Juan Dela Cruz"
-          icon={<User size={18} className="text-[#84BABF]" />}
+          icon={<User size={18} className="text-[#004643]" />}
           error={errors.full_name?.message}
           {...register('full_name', {
             required: 'Full name is required',
@@ -55,7 +63,7 @@ export default function RegisterForm() {
           label="Email address"
           type="email"
           placeholder="you@example.com"
-          icon={<Mail size={18} className="text-[#84BABF]" />}
+          icon={<Mail size={18} className="text-[#004643]" />}
           error={errors.email?.message}
           {...register('email', {
             required: 'Email is required',
@@ -67,12 +75,12 @@ export default function RegisterForm() {
           label="Password"
           type={showPwd ? 'text' : 'password'}
           placeholder="Min. 8 characters"
-          icon={<Lock size={18} className="text-[#84BABF]" />}
+          icon={<Lock size={18} className="text-[#004643]" />}
           iconRight={
             <button
               type="button"
               onClick={() => setShowPwd((p) => !p)}
-              className="p-1.5 rounded-lg text-[#84BABF] hover:text-[#E0EDE9] hover:bg-[#085558]/40 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#006F73]"
+              className="p-1.5 rounded-lg text-[#697773] hover:text-[#004643] hover:bg-[#e5f2f1] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#004643]"
               title={showPwd ? "Hide password" : "Show password"}
             >
               {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -89,7 +97,7 @@ export default function RegisterForm() {
           label="Confirm Password"
           type="password"
           placeholder="Repeat your password"
-          icon={<Lock size={18} className="text-[#84BABF]" />}
+          icon={<Lock size={18} className="text-[#004643]" />}
           error={errors.confirm_password?.message}
           {...register('confirm_password', {
             required: 'Please confirm your password',
@@ -105,9 +113,9 @@ export default function RegisterForm() {
         loading={isSubmitting}
         size="lg"
         icon={!isSubmitting && <UserPlus size={18} />}
-        className="mt-2 shadow-[0_0_20px_rgba(0,111,115,0.25)] hover:shadow-[0_0_30px_rgba(0,111,115,0.4)] border border-[#84BABF]/20 transition-all duration-300"
+        className="mt-2 transition-all duration-300"
       >
-        <span className="tracking-wide font-semibold text-[#E0EDE9]">
+        <span className="tracking-wide font-semibold text-white">
           Create Account
         </span>
       </Button>

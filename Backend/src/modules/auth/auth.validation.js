@@ -119,9 +119,35 @@ const refreshToken = {
     // No body validation needed as token comes from cookie
 };
 
+const changePassword = {
+    body: Joi.object({
+        current_password: Joi.string()
+            .min(8)
+            .max(100)
+            .required()
+            .messages({
+                'string.min': 'Current password must be at least 8 characters long',
+                'string.max': 'Current password cannot exceed 100 characters',
+                'any.required': 'Current password is required'
+            }),
+        new_password: Joi.string()
+            .min(8)
+            .max(100)
+            .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]'))
+            .required()
+            .messages({
+                'string.min': 'New password must be at least 8 characters long',
+                'string.max': 'New password cannot exceed 100 characters',
+                'string.pattern.base': 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+                'any.required': 'New password is required'
+            })
+    })
+};
+
 module.exports = {
     registerOwner,
     registerCashier,
     login,
-    refreshToken
+    refreshToken,
+    changePassword
 };

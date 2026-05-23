@@ -6,17 +6,17 @@ import Card, { CardHeader, CardTitle } from '../../components/ui/Card'
 import { Package } from 'lucide-react'
 
 // ─── Custom Teal Palette for the Chart ───
-const THEME_COLORS = ['#84BABF', '#4A9A9E', '#006F73', '#055C60', '#085558']
+const THEME_COLORS = ['#004643', '#0f766e', '#2563eb', '#d97706', '#7c3aed']
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null
   const item = payload[0]?.payload
   return (
-    <div className="bg-[#06363D]/90 backdrop-blur-xl border border-[#84BABF]/30 rounded-xl px-3 py-2.5 shadow-xl shadow-[#085558]/50">
-      <p className="text-[#E0EDE9] font-semibold text-sm mb-1">{item?.name}</p>
+    <div className="bg-white border border-[#d9d4c8] rounded-lg px-3 py-2.5 shadow-xl">
+      <p className="text-[#182321] font-semibold text-sm mb-1">{item?.name}</p>
       <div className="flex items-center gap-1.5">
-        <span className="w-2 h-2 rounded-full bg-[#84BABF]" />
-        <p className="text-[#84BABF] text-xs font-medium">{payload[0]?.value} units sold</p>
+        <span className="w-2 h-2 rounded-full bg-[#004643]" />
+        <p className="text-[#697773] text-xs font-medium">{payload[0]?.value} units sold</p>
       </div>
     </div>
   )
@@ -31,17 +31,17 @@ export default function TopProductsChart({ data = [] }) {
   }))
 
   return (
-    <Card className="col-span-full lg:col-span-1 border-[#84BABF]/20 shadow-[0_0_30px_rgba(8,85,88,0.2)]">
-      <CardHeader className="border-b border-[#84BABF]/10 pb-4 mb-4">
-        <CardTitle className="text-[#E0EDE9] flex items-center gap-2">
-          <Package size={18} className="text-[#84BABF]" />
+    <Card className="col-span-full lg:col-span-1">
+      <CardHeader className="border-b border-[#ebe6dc] pb-4 mb-4">
+        <CardTitle className="flex items-center gap-2">
+          <Package size={18} className="text-[#004643]" />
           Top Products
         </CardTitle>
       </CardHeader>
 
       {chartData.length === 0 ? (
         <div className="flex items-center justify-center h-[260px]">
-          <p className="text-[#84BABF] text-sm opacity-70">No sales data yet.</p>
+          <p className="text-[#697773] text-sm opacity-70">No sales data yet.</p>
         </div>
       ) : (
         <div className="h-[280px] w-full mt-2">
@@ -53,7 +53,7 @@ export default function TopProductsChart({ data = [] }) {
             >
               <XAxis
                 type="number"
-                tick={{ fill: '#84BABF', fontSize: 11, fontWeight: 500 }}
+                tick={{ fill: '#697773', fontSize: 11, fontWeight: 500 }}
                 axisLine={false}
                 tickLine={false}
                 tickMargin={8}
@@ -62,7 +62,7 @@ export default function TopProductsChart({ data = [] }) {
               <YAxis
                 type="category"
                 dataKey="name"
-                tick={{ fill: '#E0EDE9', fontSize: 11, fontWeight: 500 }}
+                tick={{ fill: '#34413e', fontSize: 11, fontWeight: 500 }}
                 axisLine={false}
                 tickLine={false}
                 width={85}
@@ -71,7 +71,7 @@ export default function TopProductsChart({ data = [] }) {
               />
               <Tooltip 
                 content={<CustomTooltip />} 
-                cursor={{ fill: 'rgba(132,186,191,0.1)', radius: [0, 8, 8, 0] }} 
+                cursor={{ fill: '#f0ede5', radius: [0, 8, 8, 0] }} 
               />
               <Bar 
                 dataKey="quantity_sold" 

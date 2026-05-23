@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
     }
     
     verify()
-  }, [logout]) // Include logout in dependencies
+  }, [logout, token])
 
   const login = useCallback((userData, tokenData) => {
     if (!userData || !tokenData) {
@@ -71,7 +71,6 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user',  JSON.stringify(userData))
     localStorage.setItem('token', tokenData)
     
-    console.log('User logged in:', userData)
   }, [])
 
   // Token refresh function

@@ -5,14 +5,19 @@ import { useToast }       from '../../hooks/useToast'
 import salesService       from '../../services/salesService'
 import SalesTable         from '../../features/sales/SalesTable'
 import RevenueChart       from '../../features/dashboard/RevenueChart'
+import TopProductsChart   from '../../features/dashboard/TopProductsChart'
 import StatCard           from '../../components/ui/StatCard'
 import Select             from '../../components/ui/Select'
 import Button             from '../../components/ui/Button'
 import Pagination         from '../../components/ui/Pagination'
 import EmptyState         from '../../components/ui/EmptyState'
 import { formatCurrency } from '../../utils/formatters'
-import { TrendingUp, ShoppingBag, BarChart3, Download, Store, RefreshCw } from 'lucide-react'
+import { TrendingUp, ShoppingBag, BarChart3, Download, Store, RefreshCw, PieChart as PieIcon } from 'lucide-react'
 import { PAGINATION_LIMIT } from '../../utils/constants'
+import {
+  PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+} from 'recharts'
 
 // ✅ Helper to prevent UTC bugs
 const getLocalDate = (d = new Date()) => {
@@ -27,6 +32,85 @@ const PERIOD_OPTIONS = [
   { value: '90d', label: 'Last 90 days' },
   { value: '1y',  label: 'This year'    },
 ]
+
+const CHART_COLORS = ['#004643', '#0f766e', '#2563eb', '#d97706', '#7c3aed', '#dc2626']
+
+function ChartCard({ title, icon, children, empty }) {
+  return (
+    <div className="glass-card p-5">
+      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#ebe6dc]">
+        <span className="text-[#004643]">{icon}</span>
+        <h3 className="text-base font-bold text-[#182321]">{title}</h3>
+      </div>
+      {empty ? (
+        <div className="h-[280px] flex items-center justify-center text-sm text-[#697773]">
+          No chart data available yet.
+        </div>
+      ) : children}
+    </div>
+  )
+}
+
+function ProductMixChart({ data = [] }) {
+  const chartData = data.slice(0, 6).map((item) => ({
+    name: item.product_name ?? 'Unknown',
+    value: Number(item.quantity_sold ?? item.total_sold ?? 0),
+  })).filter((item) => item.value > 0)
+
+  return (
+    <ChartCard title="Sales Mix" icon={<PieIcon size={18} />} empty={!chartData.length}>
+      <div className="h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={62} outerRadius={92} paddingAngle={3}>
+              {chartData.map((_, index) => (
+                <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value, name) => [`${value} sold`, name]}
+              contentStyle={{ borderRadius: 8, borderColor: '#d9d4c8' }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {chartData.map((item, index) => (
+          <div key={item.name} className="flex items-center gap-2 text-xs text-[#34413e] min-w-0">
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+            <span className="truncate">{item.name}</span>
+          </div>
+        ))}
+      </div>
+    </ChartCard>
+  )
+}
+
+function ProfitRevenueChart({ reports }) {
+  const data = [
+    { name: 'Revenue', value: Number(reports?.total_revenue ?? 0), fill: '#004643' },
+    { name: 'Profit', value: Number(reports?.total_profit ?? 0), fill: '#0f766e' },
+    { name: 'Average Sale', value: Number(reports?.avg_sale ?? 0), fill: '#2563eb' },
+  ]
+
+  return (
+    <ChartCard title="Revenue Breakdown" icon={<BarChart3 size={18} />} empty={data.every((item) => item.value === 0)}>
+      <div className="h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 12, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#ebe6dc" vertical={false} />
+            <XAxis dataKey="name" tick={{ fill: '#697773', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <YAxis tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} tick={{ fill: '#697773', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <Tooltip formatter={(value) => formatCurrency(value)} contentStyle={{ borderRadius: 8, borderColor: '#d9d4c8' }} />
+            <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={74}>
+              {data.map((entry) => <Cell key={entry.name} fill={entry.fill} />)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </ChartCard>
+  )
+}
 
 export default function FinanceReports() {
   const { shopId } = useShop()
@@ -103,7 +187,7 @@ export default function FinanceReports() {
   if (!shopId) {
     return (
       <EmptyState 
-        icon={<Store size={56} className="text-[#84BABF]" />} 
+        icon={<Store size={56} className="text-[#004643]" />} 
         title="No Shop Selected" 
         message="Please select a shop first from the Manage Shops page to view finance reports." 
       />
@@ -123,12 +207,12 @@ export default function FinanceReports() {
     <div className="space-y-6 sm:space-y-8 animate-fade-in relative z-10 w-full pb-8">
       
       {/* --- Premium Glass Header --- */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5 bg-[#0B2B26]/20 border border-[#84BABF]/20 p-6 sm:px-8 rounded-[2rem] backdrop-blur-xl shadow-lg shadow-[#06363D]/50">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5 glass-card p-6 sm:px-8">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#E0EDE9] tracking-tight flex items-center gap-3">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#182321] tracking-tight flex items-center gap-3">
             Finance Reports
           </h2>
-          <p className="text-[#84BABF] text-sm sm:text-base font-medium mt-1">
+          <p className="text-[#697773] text-sm sm:text-base font-medium mt-1">
             Revenue, profit, and comprehensive sales analytics
           </p>
         </div>
@@ -138,7 +222,7 @@ export default function FinanceReports() {
           <Button 
             variant="ghost" 
             size="md" 
-            icon={<RefreshCw size={18} className={isSyncing ? "animate-spin text-[#E0EDE9]" : ""} />} 
+            icon={<RefreshCw size={18} className={isSyncing ? "animate-spin text-[#004643]" : ""} />} 
             onClick={() => setTick(t=>t+1)}
             disabled={rLoading}
             className="hidden sm:flex shrink-0"
@@ -159,7 +243,7 @@ export default function FinanceReports() {
             size="md"
             icon={<Download size={18} />} 
             onClick={handleExport}
-            className="flex-grow sm:flex-grow-0 shrink-0 shadow-md shadow-[#006F73]/20 hover:shadow-[#006F73]/40"
+            className="flex-grow sm:flex-grow-0 shrink-0"
           >
             Export
           </Button>
@@ -174,19 +258,27 @@ export default function FinanceReports() {
       </div>
 
       {/* --- Revenue Chart Section --- */}
-      <div className="w-full">
-        <RevenueChart data={reports?.daily_revenue ?? []} />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <div className="xl:col-span-2">
+          <RevenueChart data={reports?.daily_revenue ?? []} />
+        </div>
+        <ProductMixChart data={reports?.top_products ?? []} />
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <ProfitRevenueChart reports={reports} />
+        <TopProductsChart data={reports?.top_products ?? []} />
       </div>
 
       {/* --- All Transactions Table Section --- */}
-      <div className="bg-[#085558]/10 border border-[#84BABF]/20 rounded-[2rem] p-6 sm:p-8 backdrop-blur-xl shadow-lg shadow-[#06363D]/30">
+      <div className="glass-card p-6 sm:p-8">
         
         {/* Table Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-          <h3 className="text-xl sm:text-2xl font-bold text-[#E0EDE9] tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-bold text-[#182321] tracking-tight">
             All Transactions
           </h3>
-          <span className="text-sm font-semibold text-[#84BABF] bg-[#06363D]/50 px-3 py-1.5 rounded-lg border border-[#84BABF]/20 shadow-inner shrink-0">
+          <span className="text-sm font-semibold text-[#004643] bg-[#e5f2f1] px-3 py-1.5 rounded-lg border border-[#c8ddda] shrink-0">
             {totalSalesCount} Records Found
           </span>
         </div>
@@ -196,7 +288,7 @@ export default function FinanceReports() {
         
         {/* Pagination Footer */}
         {totalSalesCount > 0 && (
-          <div className="mt-6 pt-6 border-t border-[#84BABF]/10 flex justify-center">
+          <div className="mt-6 pt-6 border-t border-[#ebe6dc] flex justify-center">
             <Pagination
               page={page}
               total={totalSalesCount}

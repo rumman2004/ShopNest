@@ -13,13 +13,13 @@ export default function Table({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/8">
+            <tr className="border-b border-[#d9d4c8] bg-[#faf8f2]">
               {columns.map((col, i) => (
                 <th
                   key={i}
                   className={`
                     px-4 py-3.5 text-left
-                    text-xs font-semibold text-slate-400 uppercase tracking-wider
+                    text-xs font-semibold text-[#697773] uppercase tracking-wider
                     whitespace-nowrap
                     ${col.className ?? ''}
                   `}
@@ -48,12 +48,12 @@ export default function Table({
               data.map((row, rowIdx) => (
                 <tr
                   key={rowIdx}
-                  className="border-b border-white/5 hover:bg-white/3 transition-colors duration-150"
+                  className="border-b border-[#ebe6dc] hover:bg-[#f7f4ed] transition-colors duration-150"
                 >
                   {columns.map((col, colIdx) => (
                     <td
                       key={colIdx}
-                      className={`px-4 py-3.5 text-slate-300 whitespace-nowrap ${col.cellClassName ?? ''}`}
+                      className={`px-4 py-3.5 text-[#34413e] whitespace-nowrap ${col.cellClassName ?? ''}`}
                     >
                       {col.render ? col.render(row[col.key], row) : row[col.key] ?? '—'}
                     </td>
