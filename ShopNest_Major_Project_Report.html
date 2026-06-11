@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopNest — Major Project Report | Rumman Ahmed</title>
+    <style>
+        /* ===== BASE RESET & TYPOGRAPHY ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Merriweather:wght@400;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-text: #1a1a1a;
+            --color-heading: #0d0d0d;
+            --color-accent: #1a3c6e;
+            --color-border: #cccccc;
+            --color-bg-light: #f5f7fa;
+            --color-code-bg: #f0f2f5;
+            --font-body: 'Times New Roman', 'Merriweather', Georgia, serif;
+            --font-code: 'Source Code Pro', 'Courier New', monospace;
+        }
+
+        html {
+            font-size: 12pt;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            line-height: 1.8;
+            background: #ffffff;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 15mm 20mm;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body {
+                padding: 0;
+                max-width: 100%;
+                font-size: 12pt;
+                line-height: 1.7;
+            }
+
+            @page {
+                size: A4;
+                margin: 25mm 20mm 25mm 25mm;
+            }
+
+            .page-break {
+                page-break-before: always;
+                break-before: page;
+            }
+
+            .no-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            table, pre, blockquote {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .cover-page {
+                page-break-after: always;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--color-text);
+            }
+        }
+
+        /* ===== SCREEN PREVIEW HELPERS ===== */
+        @media screen {
+            body {
+                background: #e8e8e8;
+            }
+
+            .page-break {
+                margin-top: 40px;
+                padding-top: 40px;
+                border-top: 3px dashed #ccc;
+            }
+
+            .cover-page, .certificate-page {
+                background: #fff;
+                padding: 40px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .content-section {
+                background: #fff;
+                padding: 30px 40px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 {
+            font-size: 22pt;
+            color: var(--color-heading);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            font-size: 16pt;
+            color: var(--color-accent);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--color-accent);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 14pt;
+            color: var(--color-heading);
+            margin-top: 22px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h4 {
+            font-size: 12pt;
+            color: #333;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        /* ===== PARAGRAPHS & TEXT ===== */
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding-top: 60px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cover-page .college-name {
+            font-size: 18pt;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 5px;
+        }
+
+        .cover-page .college-location {
+            font-size: 12pt;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .cover-page .session {
+            font-size: 12pt;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .cover-page .project-title {
+            font-size: 22pt;
+            font-weight: 700;
+            color: var(--color-heading);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .cover-page .subtitle {
+            font-size: 14pt;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 35px;
+        }
+
+        .cover-page .degree-text {
+            font-size: 12pt;
+            margin-bottom: 5px;
+        }
+
+        .cover-page .degree-name {
+            font-size: 16pt;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 40px;
+        }
+
+        .cover-page .info-block {
+            margin-bottom: 20px;
+        }
+
+        .cover-page .info-label {
+            font-size: 11pt;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .cover-page .info-value {
+            font-size: 13pt;
+            font-weight: 700;
+        }
+
+        .cover-page .info-detail {
+            font-size: 11pt;
+            color: #444;
+        }
+
+        .cover-divider {
+            width: 60%;
+            border: none;
+            border-top: 2px solid var(--color-accent);
+            margin: 25px auto;
+        }
+
+        /* ===== CERTIFICATE PAGES ===== */
+        .certificate-page {
+            min-height: 80vh;
+            padding-top: 40px;
+        }
+
+        .certificate-page h2 {
+            text-align: center;
+            border-bottom: none;
+            font-size: 18pt;
+            margin-bottom: 30px;
+        }
+
+        .certificate-page p {
+            font-size: 12pt;
+            line-height: 2;
+            margin-bottom: 15px;
+        }
+
+        .signature-block {
+            margin-top: 60px;
+        }
+
+        .signature-line {
+            width: 250px;
+            border-top: 1px solid #333;
+            margin-bottom: 5px;
+        }
+
+        .signature-block p {
+            text-align: left;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        /* ===== INDEX TABLE ===== */
+        .index-page {
+            padding-top: 30px;
+        }
+
+        .index-page h2 {
+            text-align: center;
+            border-bottom: none;
+            font-size: 18pt;
+        }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 20px;
+            font-size: 11pt;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: var(--color-accent);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 11pt;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9fb;
+        }
+
+        td:first-child {
+            font-weight: 600;
+        }
+
+        /* ===== LISTS ===== */
+        ul, ol {
+            margin: 10px 0 15px 25px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            text-align: justify;
+        }
+
+        /* ===== CODE BLOCKS ===== */
+        pre {
+            background: var(--color-code-bg);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin: 12px 0 18px;
+            overflow-x: auto;
+            font-family: var(--font-code);
+            font-size: 9.5pt;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-family: var(--font-code);
+            font-size: 10pt;
+            background: var(--color-code-bg);
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        /* ===== ARCHITECTURE DIAGRAM ===== */
+        .arch-diagram {
+            background: #f8f9fc;
+            border: 2px solid var(--color-accent);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0 20px;
+            font-family: var(--font-code);
+            font-size: 9pt;
+            line-height: 1.4;
+            text-align: center;
+            white-space: pre;
+        }
+
+        /* ===== DFD DIAGRAMS ===== */
+        .dfd-block {
+            background: #fafbfd;
+            border-left: 4px solid var(--color-accent);
+            padding: 15px 20px;
+            margin: 12px 0 18px;
+            font-size: 11pt;
+        }
+
+        .dfd-block .dfd-title {
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 5px;
+        }
+
+        .dfd-block p {
+            margin-bottom: 3px;
+            text-align: left;
+            font-size: 10.5pt;
+        }
+
+        /* ===== CHECKMARKS ===== */
+        .result-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .result-list li {
+            padding-left: 5px;
+        }
+
+        .result-list li::before {
+            content: "✅ ";
+        }
+
+        /* ===== ER DIAGRAM ===== */
+        .er-diagram-container {
+            background: #f8f9fc;
+            border: 2px solid var(--color-accent);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .er-table {
+            display: inline-block;
+            border: 2px solid var(--color-accent);
+            border-radius: 5px;
+            margin: 8px;
+            vertical-align: top;
+            min-width: 180px;
+            background: #fff;
+        }
+
+        .er-table-header {
+            background: var(--color-accent);
+            color: white;
+            padding: 6px 12px;
+            font-weight: 700;
+            font-size: 10pt;
+            text-align: center;
+        }
+
+        .er-table-body {
+            padding: 6px 10px;
+            font-size: 9pt;
+            line-height: 1.6;
+        }
+
+        .er-table-body .pk { color: #c0392b; font-weight: 700; }
+        .er-table-body .fk { color: #2980b9; font-weight: 600; }
+
+        /* ===== FOOTER ===== */
+        .report-footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 2px solid var(--color-accent);
+            text-align: center;
+            font-size: 10pt;
+            color: #555;
+        }
+
+        .report-footer strong {
+            color: var(--color-accent);
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mt-40 { margin-top: 40px; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+        .indent { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================ -->
+    <!-- COVER PAGE -->
+    <!-- ============================================ -->
+    <div class="cover-page">
+        <div class="college-name">Sibsagar Commerce College</div>
+        <div class="college-location">Sibsagar, Assam</div>
+        <div class="session">Session: (2022–25)</div>
+
+        <hr class="cover-divider">
+
+        <div class="project-title">ShopNest — Multi-Tenant Point of Sale (POS) System</div>
+        <div class="subtitle">Major Project Report</div>
+
+        <p class="degree-text">Submitted in partial fulfillment of requirement for the award of the degree of</p>
+        <div class="degree-name">Bachelor of Computer Application</div>
+
+        <hr class="cover-divider">
+
+        <div class="info-block">
+            <div class="info-label">Submitted By</div>
+            <div class="info-value">Rumman Ahmed</div>
+            <div class="info-detail">Roll No: 23992035</div>
+            <div class="info-detail">Registration No: C2300510</div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-label">Under the supervision of</div>
+            <div class="info-value">Mr. Panchanan Saikia</div>
+            <div class="info-detail">Assistant Professor</div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CERTIFICATE OF ACCEPTANCE -->
+    <!-- ============================================ -->
+    <div class="certificate-page page-break">
+        <h2>CERTIFICATE OF ACCEPTANCE</h2>
+
+        <p>This is to certify that <strong>Rumman Ahmed</strong> of Sibsagar Commerce College has successfully completed the project entitled <strong>"ShopNest — Multi-Tenant Point of Sale (POS) System"</strong> under the supervision of <strong>Mr. Panchanan Saikia</strong>, during the period from _______________ to _______________.</p>
+
+        <p>The project work has been carried out in partial fulfilment of the requirements for the award of the degree of Bachelor of Computer Applications, and is hereby accepted by Sibsagar Commerce College.</p>
+
+        <div class="signature-block">
+            <div class="signature-line"></div>
+            <p><strong>Signature of Supervisor</strong></p>
+            <p>Name: Mr. Panchanan Saikia</p>
+            <p>Date: _______________</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CERTIFICATE FROM THE GUIDE -->
+    <!-- ============================================ -->
+    <div class="certificate-page page-break">
+        <h2>CERTIFICATE FROM THE GUIDE</h2>
+
+        <p>This is to certify that the project entitled <strong>"ShopNest — Multi-Tenant Point of Sale (POS) System"</strong>, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, is submitted in partial fulfilment of the requirements for the 6th Semester of the Bachelor of Computer Application (BCA) program.</p>
+
+        <p>The project work has been carried out by the following student:</p>
+
+        <ol class="mt-20">
+            <li><strong>Rumman Ahmed</strong></li>
+        </ol>
+
+        <p class="mt-20">This work is a result of his sincere efforts and has been completed under my supervision and guidance.</p>
+
+        <div class="signature-block">
+            <div class="signature-line"></div>
+            <p><strong>Signature of the Guide</strong></p>
+            <p>Mr. Panchanan Saikia</p>
+            <p>Date: _______________</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CERTIFICATE FROM THE EXAMINER -->
+    <!-- ============================================ -->
+    <div class="certificate-page page-break">
+        <h2>CERTIFICATE FROM THE EXAMINER</h2>
+
+        <p>This is to certify that the project report entitled <strong>"ShopNest — Multi-Tenant Point of Sale (POS) System"</strong>, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, in partial fulfilment of the requirements for the 6th Semester of the Bachelor of Computer Application (BCA) program, has been evaluated by us on _______________.</p>
+
+        <div class="signature-block mt-40">
+            <div class="signature-line"></div>
+            <p><strong>Signature of the Examiner</strong></p>
+            <p>Name(s): _______________</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- INDEX -->
+    <!-- ============================================ -->
+    <div class="index-page page-break">
+        <h2>INDEX</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Chapter No.</th>
+                    <th>Chapter Title</th>
+                    <th style="width: 80px; text-align: center;">Page No.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td style="text-align:center;">1</td><td>Introduction &amp; Objectives</td><td></td></tr>
+                <tr><td style="text-align:center;">2</td><td>Key Features of the System</td><td></td></tr>
+                <tr><td style="text-align:center;">3</td><td>Tools &amp; Development Environment</td><td></td></tr>
+                <tr><td style="text-align:center;">4</td><td>System Analysis</td><td></td></tr>
+                <tr><td style="text-align:center;">5</td><td>System Design</td><td></td></tr>
+                <tr><td style="text-align:center;">6</td><td>Testing &amp; Validation</td><td></td></tr>
+                <tr><td style="text-align:center;">7</td><td>Input and Output Design</td><td></td></tr>
+                <tr><td style="text-align:center;">8</td><td>Database Design</td><td></td></tr>
+                <tr><td style="text-align:center;">9</td><td>Advantages of the Proposed System</td><td></td></tr>
+                <tr><td style="text-align:center;">10</td><td>Future Scope of the Project</td><td></td></tr>
+                <tr><td style="text-align:center;">11</td><td>Output Screens</td><td></td></tr>
+                <tr><td style="text-align:center;">12</td><td>Conclusion</td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 1: INTRODUCTION -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 1 — Introduction</h2>
+
+        <p>In today's competitive retail environment, efficiently managing sales transactions, product inventories, staff operations, and revenue analytics within shops is essential for maximizing profitability, reducing losses, and improving customer satisfaction. Traditional manual billing using physical registers and handwritten ledgers is not only time-consuming and error-prone but also lacks the visibility needed for data-driven business decisions.</p>
+
+        <p>This project presents <strong>ShopNest</strong>, a comprehensive, production-ready <strong>Multi-Tenant Point of Sale (POS) System</strong> developed using a modern full-stack web technology stack — <strong>React.js, Vite, Express.js, Node.js, and MySQL</strong> — to streamline sales processing, inventory tracking, cashier management, and financial reporting for retail businesses.</p>
+
+        <p>The system is designed as a multi-tenant architecture, meaning a single deployment can serve multiple store owners, each with their own isolated data, shops, products, and cashiers. This makes ShopNest ideal for both independent shop owners and small retail chains looking for a lightweight yet powerful POS solution.</p>
+
+        <p>The system provides a seamless and user-friendly interface for two key user roles:</p>
+
+        <p><strong>Owner Panel:</strong> Centralized administrative control to create and manage multiple shops, add and supervise cashiers, maintain product catalogues with images, track real-time revenue and sales analytics through interactive dashboards, and generate detailed financial reports.</p>
+
+        <p><strong>Cashier Panel:</strong> A streamlined, purpose-built Point of Sale terminal interface for cashiers to quickly process sales transactions, check current product stock availability, and view their daily sales history — all within a fast and intuitive workflow.</p>
+
+        <h3>Objectives of the Project</h3>
+
+        <ul>
+            <li>To develop a modern, web-based Multi-Tenant Point of Sale (POS) and Inventory Management System using React.js, Express.js, Node.js, and MySQL.</li>
+            <li>To provide role-based access control for Owners and Cashiers with distinct dashboards and permissions.</li>
+            <li>To simplify the sales billing process with an intuitive POS terminal interface featuring real-time product search and cart management.</li>
+            <li>To enable comprehensive inventory management with bulk product upload capability via Excel file parsing.</li>
+            <li>To provide centralized product image hosting through Cloudinary integration for optimized, fast-loading media.</li>
+            <li>To implement real-time, interactive business analytics dashboards with revenue tracking, top-selling products, and sales flow visualizations using Recharts.</li>
+            <li>To ensure enterprise-grade security with JWT-based authentication, bcrypt password hashing, Helmet, rate limiting, and CORS protection.</li>
+            <li>To create a fully responsive interface that works seamlessly on desktop terminals and mobile tablets.</li>
+            <li>To build a scalable, modular system that can handle multiple shops, products, cashiers, and large transaction volumes.</li>
+            <li>To allow future enhancements such as barcode scanning, receipt printing, customer loyalty programs, and multi-branch analytics.</li>
+        </ul>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 2: KEY FEATURES -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 2 — Key Features of the System</h2>
+
+        <h3>2.1 Owner Features</h3>
+        <ul>
+            <li><strong>Owner Registration &amp; Login</strong> — Secure account creation and authentication</li>
+            <li><strong>Multi-Shop Management</strong> — Create, update, and delete multiple shops/branches with logos</li>
+            <li><strong>Shop Switching</strong> — Seamlessly switch between shops from a single dashboard</li>
+            <li><strong>Interactive Dashboard</strong> — Real-time analytics with revenue charts, top-selling products, recent transactions, and key performance indicators (KPIs)</li>
+            <li><strong>Product &amp; Inventory Management</strong> — Full CRUD operations for products with image upload, SKU codes, cost prices, selling prices, stock quantities, and category assignment</li>
+            <li><strong>Bulk Product Upload</strong> — Import product catalogues from Excel (XLSX) files for rapid inventory setup</li>
+            <li><strong>Category Management</strong> — Create and organize product categories per shop</li>
+            <li><strong>Cashier Management</strong> — Add, edit, activate/deactivate, and delete cashiers assigned to specific shops</li>
+            <li><strong>Financial Reports</strong> — Detailed sales analytics, revenue trends, cashier performance metrics, and inventory valuation reports</li>
+            <li><strong>Activity Logs</strong> — Track all inventory-related actions (product CRUD, stock adjustments, image uploads) for audit purposes</li>
+            <li><strong>Low Stock Alerts</strong> — Automatic identification of products running low on stock</li>
+            <li><strong>Digital Receipts</strong> — Automated email receipt dispatching via EmailJS integration</li>
+        </ul>
+
+        <h3>2.2 Cashier Features</h3>
+        <ul>
+            <li><strong>Cashier Login</strong> — Secure login with credentials assigned by the shop owner</li>
+            <li><strong>POS Terminal</strong> — Dedicated point-of-sale interface with real-time product search, add-to-cart, quantity adjustment, and checkout</li>
+            <li><strong>Cart Management</strong> — Add/remove items, adjust quantities, view running totals</li>
+            <li><strong>Sales Processing</strong> — Complete transactions with tendered amount and automatic change calculation</li>
+            <li><strong>Daily Sales History</strong> — View detailed log of all transactions processed during the current day</li>
+            <li><strong>Stock Checking</strong> — Quick inventory lookup to check product availability and stock levels</li>
+        </ul>
+
+        <h3>2.3 System-Wide Features</h3>
+        <ul>
+            <li>Built using a modern full-stack: <strong>React 19, Vite 7, Express.js, Node.js, MySQL</strong></li>
+            <li><strong>Role-Based Access Control:</strong> Owner and Cashier with distinct permissions and dashboards</li>
+            <li><strong>Responsive UI</strong> with Tailwind CSS for desktop, tablet, and mobile</li>
+            <li><strong>Dynamic Charts</strong> using Recharts (Bar, Line, Area, Pie) for business analytics</li>
+            <li><strong>Enterprise-Grade Security</strong> with JWT, Bcrypt, Helmet, CORS, and Rate Limiting</li>
+            <li><strong>RESTful API v1</strong> with comprehensive endpoint documentation</li>
+            <li><strong>Cloudinary CDN</strong> for optimized product image storage and delivery</li>
+            <li><strong>Deployed on Vercel</strong> (both Frontend and Backend) with <strong>AWS-hosted MySQL</strong> database</li>
+        </ul>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 3: TOOLS & ENVIRONMENT -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 3 — Tools &amp; Development Environment</h2>
+
+        <h3>3.1 Frontend Technologies</h3>
+        <table>
+            <thead><tr><th>Technology</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>React 19</td><td>JavaScript library for building interactive, component-based user interfaces</td></tr>
+                <tr><td>Vite 7</td><td>Next-generation frontend build tool for extremely fast development and HMR</td></tr>
+                <tr><td>Tailwind CSS 4</td><td>Utility-first CSS framework for creating fully responsive and modern layouts</td></tr>
+                <tr><td>React Router DOM 6</td><td>Client-side routing and navigation between different screens and protected routes</td></tr>
+                <tr><td>React Hook Form</td><td>Performant, flexible form handling with easy validation</td></tr>
+                <tr><td>Recharts</td><td>Composable charting library for implementing dynamic bar, line, area, and pie charts</td></tr>
+                <tr><td>Lucide React</td><td>Beautiful, consistent icon pack with lightweight, scalable SVG icons</td></tr>
+                <tr><td>Axios</td><td>Promise-based HTTP client for making API requests to the backend</td></tr>
+                <tr><td>Date-fns</td><td>Modern JavaScript date utility library for formatting and manipulating dates</td></tr>
+                <tr><td>XLSX</td><td>Library for parsing and generating Excel spreadsheets (bulk product upload)</td></tr>
+                <tr><td>EmailJS</td><td>Client-side email service for sending digital receipts and notifications</td></tr>
+                <tr><td>GSAP</td><td>Professional-grade animation library for smooth UI animations and transitions</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3.2 Backend Technologies</h3>
+        <table>
+            <thead><tr><th>Technology</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>Node.js</td><td>JavaScript runtime for developing fast and scalable server-side applications</td></tr>
+                <tr><td>Express.js 4</td><td>Minimal and flexible web application framework for creating RESTful APIs</td></tr>
+                <tr><td>MySQL (via mysql2)</td><td>Relational database management system for structured data storage with ACID compliance</td></tr>
+                <tr><td>JSON Web Tokens (JWT)</td><td>Token-based authentication for secure, stateless API access</td></tr>
+                <tr><td>Bcryptjs</td><td>Library for securely hashing passwords before storage</td></tr>
+                <tr><td>Helmet</td><td>Security middleware that sets various HTTP headers to protect against common vulnerabilities</td></tr>
+                <tr><td>CORS</td><td>Cross-Origin Resource Sharing middleware for secure cross-domain requests</td></tr>
+                <tr><td>Express Rate Limiter</td><td>Middleware to limit repeated requests and protect against brute-force attacks</td></tr>
+                <tr><td>Joi</td><td>Powerful schema-based data validation library for request payloads</td></tr>
+                <tr><td>Express Validator</td><td>Middleware for validating and sanitizing incoming request data</td></tr>
+                <tr><td>Multer</td><td>Middleware for handling multipart/form-data, used for file (image) uploads</td></tr>
+                <tr><td>Cloudinary SDK</td><td>Cloud-based image and video management API for product image hosting and optimization</td></tr>
+                <tr><td>Winston</td><td>Versatile logging library for structured application logging</td></tr>
+                <tr><td>Morgan</td><td>HTTP request logger middleware for development debugging</td></tr>
+                <tr><td>Compression</td><td>Response compression middleware to reduce payload sizes</td></tr>
+                <tr><td>Cookie Parser</td><td>Middleware for parsing cookies attached to client requests</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3.3 Development Tools</h3>
+        <table>
+            <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>Visual Studio Code</td><td>Primary code editor used for development</td></tr>
+                <tr><td>Postman</td><td>API testing tool for validating backend RESTful services</td></tr>
+                <tr><td>MySQL Workbench</td><td>GUI tool for designing, managing, and querying the MySQL database</td></tr>
+                <tr><td>Git &amp; GitHub</td><td>Version control system and code repository for source code management</td></tr>
+                <tr><td>npm</td><td>Node Package Manager for managing project dependencies</td></tr>
+                <tr><td>Nodemon</td><td>Development utility that automatically restarts the server on file changes</td></tr>
+                <tr><td>ESLint</td><td>JavaScript linting tool to enforce code quality and consistent coding standards</td></tr>
+                <tr><td>Jest &amp; Supertest</td><td>Testing frameworks for unit and integration testing of the backend API</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3.4 Deployment Platforms</h3>
+        <table>
+            <thead><tr><th>Platform</th><th>Usage</th></tr></thead>
+            <tbody>
+                <tr><td>Frontend: Vercel</td><td>Platform for hosting and deploying the React frontend with automatic CI/CD integration and global edge network</td></tr>
+                <tr><td>Backend: Vercel</td><td>Serverless deployment of the Node.js/Express.js backend API as Vercel Serverless Functions with automatic scaling</td></tr>
+                <tr><td>Database: AWS</td><td>Cloud-hosted MySQL database on AWS RDS (Relational Database Service) for production deployment with high availability, automated backups, and scalability</td></tr>
+                <tr><td>Media: Cloudinary</td><td>Cloud-based CDN for product image storage, optimization, and delivery</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 4: SYSTEM ANALYSIS -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 4 — System Analysis</h2>
+
+        <h3>4.1 Problem Statement</h3>
+        <p>In most small to medium retail businesses, sales processing, inventory tracking, cashier management, and financial reporting are handled manually or through fragmented, offline systems. This often leads to:</p>
+        <ul>
+            <li><strong>Time-consuming billing processes</strong> — Manual calculation and handwritten receipts slow down checkout</li>
+            <li><strong>Inventory inaccuracies</strong> — Stock levels are not tracked in real-time, leading to overstocking or stockouts</li>
+            <li><strong>No centralized data access</strong> — Sales data, product information, and staff records exist in disconnected spreadsheets or paper registers</li>
+            <li><strong>Revenue leakage</strong> — Without proper analytics, owners cannot identify top-selling products, slow movers, or revenue trends</li>
+            <li><strong>Cashier accountability issues</strong> — No audit trail of which cashier processed which transactions</li>
+            <li><strong>Multi-store management complexity</strong> — Owners with multiple branches cannot view consolidated reports from a single interface</li>
+            <li><strong>No real-time analytics</strong> — Business decisions are made based on outdated or incomplete information</li>
+            <li><strong>Security vulnerabilities</strong> — Shared passwords, no role-based access, and unencrypted data</li>
+        </ul>
+
+        <h3>4.2 Proposed Solution</h3>
+        <p>The proposed <strong>ShopNest POS System</strong> addresses these issues by providing:</p>
+        <ul>
+            <li>A <strong>web-based, centralized system</strong> for managing sales, inventory, cashiers, and financial analytics across multiple shops</li>
+            <li><strong>Role-based access control</strong> for Owners (admin) and Cashiers (staff) with distinct permissions</li>
+            <li><strong>Real-time POS terminal</strong> with product search, cart management, and instant checkout</li>
+            <li><strong>Live inventory tracking</strong> with stock levels updated automatically after every sale</li>
+            <li><strong>Interactive dashboards</strong> with bar charts, line charts, and KPI counters for revenue, sales trends, and product performance</li>
+            <li><strong>Multi-tenant architecture</strong> allowing owners to manage multiple shops from a single account</li>
+            <li><strong>Activity logging</strong> for complete audit trails of all inventory and sales actions</li>
+            <li><strong>Bulk product upload</strong> via Excel for rapid store setup</li>
+            <li><strong>Cloud-based image hosting</strong> through Cloudinary for optimized product photos</li>
+            <li><strong>Enterprise-grade security</strong> with JWT authentication, bcrypt password hashing, Helmet, rate limiting, and CORS</li>
+            <li><strong>Mobile-friendly design</strong> for easy access on smartphones and tablets</li>
+            <li><strong>Automated email receipts</strong> via EmailJS integration</li>
+        </ul>
+
+        <h3>4.3 Functional Requirements</h3>
+
+        <p><strong>Owner:</strong></p>
+        <ul>
+            <li>Register and manage their account</li>
+            <li>Create and manage multiple shops with logos and details</li>
+            <li>Add, edit, and delete products with images, prices, stock, SKU, and categories</li>
+            <li>Bulk upload products via Excel files</li>
+            <li>Add and manage cashiers with activation/deactivation controls</li>
+            <li>View interactive dashboard with revenue analytics, top products, and recent sales</li>
+            <li>Generate financial reports (sales analytics, revenue trends, cashier performance, inventory reports)</li>
+            <li>View activity logs for audit purposes</li>
+            <li>Receive low stock alerts</li>
+        </ul>
+
+        <p><strong>Cashier:</strong></p>
+        <ul>
+            <li>Login with credentials provided by the owner</li>
+            <li>Process sales through the POS terminal with product search and cart</li>
+            <li>View daily sales history</li>
+            <li>Check product stock availability</li>
+        </ul>
+
+        <p><strong>System:</strong></p>
+        <ul>
+            <li>RESTful APIs for smooth data flow between frontend and backend</li>
+            <li>JWT-based authentication and authorization</li>
+            <li>Paginated API responses for handling large datasets</li>
+            <li>Cloud-based image upload and delivery</li>
+            <li>Structured error handling and logging</li>
+        </ul>
+
+        <h3>4.4 Non-Functional Requirements</h3>
+        <table>
+            <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
+            <tbody>
+                <tr><td>Usability</td><td>Intuitive, clean interface designed for retail environments; minimal training required</td></tr>
+                <tr><td>Performance</td><td>Fast page loads, efficient API responses with pagination, response compression</td></tr>
+                <tr><td>Security</td><td>Password hashing with bcrypt, JWT token-based authentication, Helmet headers, rate limiting, CORS, input validation with Joi &amp; Express Validator</td></tr>
+                <tr><td>Scalability</td><td>Multi-tenant architecture; modular codebase; capable of handling many shops, products, cashiers, and transactions</td></tr>
+                <tr><td>Responsiveness</td><td>Fully responsive design accessible on desktop, tablet, and mobile devices</td></tr>
+                <tr><td>Reliability</td><td>MySQL ACID transactions ensure data integrity; proper error handling and logging with Winston</td></tr>
+                <tr><td>Maintainability</td><td>Modular folder structure, separation of concerns (routes → controllers → services → database)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4.5 Feasibility Study</h3>
+        <p><strong>Technical Feasibility:</strong> Built on a proven and widely-adopted technology stack (React, Node.js, Express, MySQL). All libraries and frameworks used are mature, well-documented, and actively maintained with strong community support.</p>
+        <p><strong>Operational Feasibility:</strong> The system dramatically improves daily retail workflow for shop owners and cashiers. The intuitive UI requires minimal training. Role-based access ensures each user sees only relevant functionality.</p>
+        <p><strong>Economic Feasibility:</strong> As a web-based solution, ShopNest eliminates the need for expensive proprietary POS hardware and software licenses. Cloud deployment (Vercel for frontend and backend, AWS for database, Cloudinary for media) offers cost-effective tiers suitable for small businesses. The system reduces manual bookkeeping effort and improves revenue visibility.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 5: SYSTEM DESIGN -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 5 — System Design</h2>
+
+        <h3>5.1 System Architecture</h3>
+        <p>ShopNest follows a modern <strong>Client-Server Architecture</strong> based on the React + Express + MySQL stack. The system is divided into two main user roles — <strong>Owner</strong> and <strong>Cashier</strong> — each with its own dedicated dashboard, layout, and access privileges.</p>
+        <p>The <strong>React.js frontend</strong> (built with Vite) communicates with the <strong>Node.js/Express.js backend</strong> via <strong>RESTful APIs</strong> (versioned as <code>/api/v1</code>). Both frontend and backend are deployed on <strong>Vercel</strong>. All data is securely stored in a <strong>MySQL database hosted on AWS RDS</strong>. Product images are hosted on <strong>Cloudinary CDN</strong>.</p>
+
+        <div class="arch-diagram">
++-------------------------------+       +-------------------------------+
+|   React Frontend (UI)         | &lt;---&gt; |   Node.js + Express.js API    |
+|   (Vite, Tailwind CSS,        |  REST |   Backend Server              |
+|    Recharts, React Hook Form)  |       |   (JWT Auth, Helmet, CORS)    |
+|   [Deployed on Vercel]         |       |   [Deployed on Vercel]         |
++-------------------------------+       +-------------------------------+
+                                                    |
+                    +---------------+        +---------------+
+                    |  MySQL DB     |        |  Cloudinary   |
+                    |  (AWS RDS)    |        |  (Images CDN) |
+                    +---------------+        +---------------+
+        </div>
+
+        <h3>5.2 Data Flow Diagrams</h3>
+
+        <h4>DFD Level 0 — Context Diagram</h4>
+        <div class="dfd-block">
+            <p class="dfd-title">ShopNest POS System (0.0)</p>
+            <p>Owner → ShopNest System → MySQL DB / Cloudinary</p>
+            <p>Cashier → ShopNest System → MySQL DB</p>
+            <p>Login / Verify Credentials → Access Role-Based Dashboard → Process Sales, Manage Inventory</p>
+        </div>
+
+        <h4>DFD Level 1 — Owner Site</h4>
+        <div class="dfd-block">
+            <p class="dfd-title">Login (1.0)</p>
+            <p>Owner → Users DB → Verify Credentials → Access Owner Dashboard</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Manage Shops (1.1)</p>
+            <p>Owner → Shops DB → Create/Update/Delete Shop → Display Updated Shop List</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Manage Products (1.2)</p>
+            <p>Owner → Products DB → Add/Edit/Delete Product → Upload Image to Cloudinary</p>
+            <p>Owner → Products DB → Bulk Upload via XLSX → Store Products</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Manage Categories (1.3)</p>
+            <p>Owner → Categories DB → Add/Edit/Delete Category → Display Updated Category List</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Manage Cashiers (1.4)</p>
+            <p>Owner → Cashiers DB → Add/Edit/Activate/Deactivate Cashier → Display Updated List</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">View Dashboard (1.5)</p>
+            <p>Owner → Sales DB, Products DB → Fetch Analytics → Display Charts &amp; KPIs</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Financial Reports (1.6)</p>
+            <p>Owner → Sales DB, Products DB → Generate Reports → Display Revenue Trends, Cashier Performance, Top Products, Inventory Valuation</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">View Activity Logs (1.7)</p>
+            <p>Owner → Activity Logs DB → Fetch Logs → Display Activity History</p>
+        </div>
+
+        <h4>DFD Level 1 — Cashier Site</h4>
+        <div class="dfd-block">
+            <p class="dfd-title">Login (1.0)</p>
+            <p>Cashier → Users DB → Verify Credentials → Access Cashier Dashboard</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">POS Terminal (1.1)</p>
+            <p>Cashier → Products DB → Search Products → Add to Cart</p>
+            <p>Cashier → Sales DB → Process Checkout → Record Transaction</p>
+            <p>Cashier → Products DB → Auto-Decrement Stock</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Daily Sales (1.2)</p>
+            <p>Cashier → Sales DB → Fetch Today's Transactions → Display Sales History</p>
+        </div>
+        <div class="dfd-block">
+            <p class="dfd-title">Stock Check (1.3)</p>
+            <p>Cashier → Products DB → Search/Browse Products → Display Stock Levels</p>
+        </div>
+
+        <h3>5.3 Major System Components</h3>
+
+        <h4>Owner Module</h4>
+        <ul>
+            <li>Owner registration &amp; secure login (JWT + bcrypt)</li>
+            <li>Interactive dashboard with system summary, revenue charts, top-selling products, and KPIs</li>
+            <li>Create / manage multiple shops with logos (Cloudinary)</li>
+            <li>Add / edit / delete products with images, pricing, stock, SKU, and categories</li>
+            <li>Bulk product import from Excel (XLSX)</li>
+            <li>Manage product categories per shop</li>
+            <li>Add / manage cashiers with activation/deactivation controls</li>
+            <li>Detailed financial reports (sales analytics, revenue trends, cashier performance, inventory)</li>
+            <li>Activity log viewer for audit trail</li>
+            <li>Low stock alert monitoring</li>
+        </ul>
+
+        <h4>Cashier Module</h4>
+        <ul>
+            <li>Cashier login with shop-assigned credentials</li>
+            <li>POS terminal with real-time product search and cart management</li>
+            <li>Transaction checkout with tendered amount and change calculation</li>
+            <li>Daily sales history viewer</li>
+            <li>Product stock availability checker</li>
+        </ul>
+
+        <h4>API Module (Backend)</h4>
+        <ul>
+            <li>RESTful API with versioned endpoints (<code>/api/v1/</code>)</li>
+            <li>JWT-based authentication and token refresh</li>
+            <li>Role-based authorization middleware</li>
+            <li>Shop access validation middleware</li>
+            <li>Image upload handling (Multer → Cloudinary)</li>
+            <li>Paginated responses for large datasets</li>
+            <li>Structured error handling with custom <code>ApiError</code> class</li>
+            <li>Request logging (Morgan) and application logging (Winston)</li>
+            <li>Rate limiting and security headers (Helmet)</li>
+        </ul>
+
+        <h3>5.4 Design Considerations</h3>
+
+        <p><strong>Security:</strong> Passwords hashed with bcrypt (10 salt rounds). JWT access tokens and refresh tokens for authentication. Role-based access control (Owner / Cashier). Shop-level data isolation (multi-tenant). Helmet security headers. Rate limiting (100 req/15 min in production). Input validation with Joi and Express Validator. CORS restriction to allowed frontend origin.</p>
+
+        <p><strong>Responsiveness:</strong> Mobile-first design using Tailwind CSS. Fully responsive layouts for desktop, tablet, and mobile. Touch-friendly POS terminal for tablet use.</p>
+
+        <p><strong>Scalability:</strong> Multi-tenant architecture with shop-level data isolation. Modular code structure (modules → routes → controllers → services). Paginated API responses. Connection pooling for MySQL. Stateless JWT authentication (horizontally scalable).</p>
+
+        <p><strong>Performance:</strong> Vite for fast frontend builds and HMR. Response compression middleware. Optimized image delivery via Cloudinary CDN. Indexed database queries. Asynchronous processing throughout the backend.</p>
+
+        <p><strong>Visualization:</strong> Recharts library for interactive bar, line, area, and pie charts. Dashboard KPI counters for at-a-glance business metrics. Revenue trend visualizations and product performance analytics.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 6: TESTING & VALIDATION -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 6 — Testing &amp; Validation</h2>
+
+        <p>To ensure that ShopNest functions correctly and meets user expectations, comprehensive testing and validation were performed on all modules of the system. Both manual testing and automated API testing were conducted throughout the development process.</p>
+
+        <h3>6.1 Objectives of Testing</h3>
+        <ul>
+            <li>To verify that all core functionalities (sales, inventory, auth, reports) work as per project requirements</li>
+            <li>To identify and resolve bugs or errors in both frontend and backend</li>
+            <li>To test security mechanisms (bcrypt password hashing, JWT authentication, role-based access, rate limiting)</li>
+            <li>To ensure smooth interaction between the React frontend and Express.js backend via RESTful APIs</li>
+            <li>To ensure data accuracy (sales totals, stock quantities, financial reports)</li>
+            <li>To validate responsiveness and performance across multiple devices and browsers</li>
+        </ul>
+
+        <h3>6.2 Types of Testing Performed</h3>
+
+        <h4>1. Unit Testing</h4>
+        <ul>
+            <li>Testing of individual React components (forms, cards, charts, modals)</li>
+            <li>Context providers (AuthContext, CartContext, ShopContext, ThemeContext) tested in isolation</li>
+            <li>Backend API endpoint handlers tested using <strong>Jest</strong> and <strong>Supertest</strong></li>
+            <li>Utility functions (pagination, date range, JWT, bcrypt) tested independently</li>
+        </ul>
+
+        <h4>2. Integration Testing</h4>
+        <ul>
+            <li>Interaction between React frontend and Express backend via Axios</li>
+            <li>Complete data flow: UI → API → MySQL → Response → UI Rendering</li>
+            <li>Correct rendering of Recharts charts with live data</li>
+            <li>Cart context integration with POS terminal checkout flow</li>
+            <li>Image upload pipeline: Multer → Cloudinary → Product creation/update</li>
+        </ul>
+
+        <h4>3. System Testing</h4>
+        <p>Testing of full end-to-end workflows:</p>
+        <ul>
+            <li>Owner registers → Creates shop → Adds products (with images) → Adds cashier</li>
+            <li>Owner views dashboard → Checks analytics → Generates financial reports</li>
+            <li>Cashier logs in → Searches products → Adds to cart → Processes checkout</li>
+            <li>Cashier views daily sales → Checks stock availability</li>
+            <li>Owner bulk uploads products via Excel → Verifies inventory</li>
+            <li>Owner manages cashier status (activate/deactivate) → Cashier access changes accordingly</li>
+        </ul>
+
+        <h4>4. Security Testing</h4>
+        <ul>
+            <li>Password hashing verified with bcrypt (plaintext never stored)</li>
+            <li>JWT token-based secure login/logout with token refresh mechanism</li>
+            <li>Role-based access (Owner/Cashier segregation) — cashiers cannot access owner routes and vice versa</li>
+            <li>Shop-level data isolation (owners can only access their own shops' data)</li>
+            <li>Rate limiting tested (429 responses after threshold)</li>
+            <li>Helmet security headers verified in responses</li>
+            <li>SQL injection prevention through parameterized queries (mysql2 prepared statements)</li>
+            <li>Input validation tested with malformed payloads (Joi validation errors returned)</li>
+        </ul>
+
+        <h4>5. Cross-Browser Testing</h4>
+        <ul>
+            <li>Google Chrome</li>
+            <li>Mozilla Firefox</li>
+            <li>Microsoft Edge</li>
+        </ul>
+
+        <h4>6. Responsiveness Testing</h4>
+        <ul>
+            <li>Desktop (1920×1080, 1366×768)</li>
+            <li>Tablet (iPad, 768×1024)</li>
+            <li>Mobile (Android and iOS, 375×667)</li>
+        </ul>
+
+        <h3>6.3 Testing Tools Used</h3>
+        <table>
+            <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>Jest</td><td>JavaScript testing framework for unit and integration tests</td></tr>
+                <tr><td>Supertest</td><td>HTTP assertion library for testing Express.js API endpoints</td></tr>
+                <tr><td>Postman</td><td>API testing tool for manual endpoint validation</td></tr>
+                <tr><td>React Developer Tools</td><td>Browser extension for component and state inspection</td></tr>
+                <tr><td>Chrome DevTools</td><td>Layout, performance, network, and responsiveness testing</td></tr>
+                <tr><td>MySQL Workbench</td><td>Direct database verification and query testing</td></tr>
+                <tr><td>ESLint</td><td>Static code analysis for identifying potential issues</td></tr>
+            </tbody>
+        </table>
+
+        <h3>6.4 Testing Results</h3>
+        <ul class="result-list">
+            <li>All Owner module features (shop management, inventory, cashier management, reports) passed test cases</li>
+            <li>All Cashier module features (POS terminal, daily sales, stock check) passed test cases</li>
+            <li>Secure authentication and password hashing working correctly</li>
+            <li>JWT token refresh mechanism functioning properly</li>
+            <li>Role-based access control enforced correctly</li>
+            <li>Fast API response times with correct behavior (&lt; 200ms average)</li>
+            <li>No critical UI bugs across devices and browsers</li>
+            <li>Charts and dashboards display correct real-time data</li>
+            <li>Cloudinary image upload and delivery working correctly</li>
+            <li>Bulk Excel upload parsing and product creation successful</li>
+            <li>Multi-tenant data isolation verified — no cross-shop data leakage</li>
+            <li>Financial reports and analytics calculations accurate</li>
+            <li>No data inconsistency detected after testing full workflows</li>
+        </ul>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 7: INPUT AND OUTPUT DESIGN -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 7 — Input and Output Design</h2>
+
+        <p>Effective Input and Output Design ensures that users can interact with the system efficiently, enter accurate data, and easily understand system responses. In ShopNest, great care has been taken to design clear, user-friendly input forms and output screens that meet the needs of Owners and Cashiers.</p>
+        <p>The system provides responsive interfaces that work seamlessly on desktop, tablet, and mobile devices.</p>
+
+        <h3>7.1 Input Design</h3>
+        <p><strong>Objectives of Input Design:</strong></p>
+        <ul>
+            <li>Simplify data entry for retail operations</li>
+            <li>Validate data to prevent errors and ensure data integrity</li>
+            <li>Provide consistent, intuitive user experience across all modules</li>
+            <li>Ensure security in data submission (authenticated API calls)</li>
+        </ul>
+
+        <p><strong>Owner Input Screens:</strong></p>
+        <ul>
+            <li>Owner Registration Form (name, email, password)</li>
+            <li>Login Form (email, password)</li>
+            <li>Create / Edit Shop Form (shop name, category, address, logo upload)</li>
+            <li>Add / Edit Product Form (name, SKU, price, cost price, stock quantity, description, category, image upload)</li>
+            <li>Bulk Product Upload (Excel file selector + import)</li>
+            <li>Add / Edit Category Form</li>
+            <li>Add / Edit Cashier Form (name, username, password)</li>
+            <li>Cashier Status Toggle (activate/deactivate)</li>
+        </ul>
+
+        <p><strong>Cashier Input Screens:</strong></p>
+        <ul>
+            <li>Cashier Login Form (username, password)</li>
+            <li>POS Terminal — Product Search Bar</li>
+            <li>POS Terminal — Cart Item Quantity Adjuster</li>
+            <li>POS Terminal — Checkout Form (tendered amount)</li>
+            <li>Stock Check — Product Search / Filter</li>
+        </ul>
+
+        <p><strong>Input Validation Techniques:</strong></p>
+        <ul>
+            <li>Required field checks (all mandatory fields enforced)</li>
+            <li>Pattern validation (email format, minimum password length)</li>
+            <li>Numeric validation (prices, quantities must be positive numbers)</li>
+            <li>File type validation (image uploads: JPEG, PNG, WebP; Excel: .xlsx, .xls)</li>
+            <li>File size limits (images: max 5MB)</li>
+            <li>Dropdown selections for Shop, Category</li>
+            <li>Real-time error messages for invalid input</li>
+            <li>Secure API submission with JWT authentication headers</li>
+            <li>Server-side validation with Joi schema and Express Validator</li>
+            <li>Client-side validation with React Hook Form</li>
+        </ul>
+
+        <h3>7.2 Output Design</h3>
+        <p><strong>Objectives of Output Design:</strong></p>
+        <ul>
+            <li>Provide clear, actionable business information</li>
+            <li>Visualize revenue, sales, and inventory trends</li>
+            <li>Display data in both chart and tabular formats</li>
+            <li>Enable users to easily understand reports and analytics</li>
+        </ul>
+
+        <p><strong>Owner Output Screens:</strong></p>
+        <ul>
+            <li><strong>Dashboard</strong> — Revenue KPIs, total products, total cashiers, total shops, recent transactions, top-selling products (bar chart), revenue trends (line chart)</li>
+            <li><strong>Shop Management</strong> — List of shops with details, logo previews, active/inactive status</li>
+            <li><strong>Inventory</strong> — Product table with images, names, SKU, prices, stock levels, categories; search and filter capabilities</li>
+            <li><strong>Cashier Management</strong> — List of cashiers with names, usernames, active status, assigned shop</li>
+            <li><strong>Financial Reports</strong> — Sales analytics (bar/line charts), revenue trends over time, cashier performance metrics, inventory valuation summary, top products by revenue/quantity</li>
+            <li><strong>Activity Logs</strong> — Chronological log of inventory actions with user, action type, entity details</li>
+        </ul>
+
+        <p><strong>Cashier Output Screens:</strong></p>
+        <ul>
+            <li><strong>POS Terminal</strong> — Product grid/list with images, prices, stock; shopping cart with running total; checkout summary with change calculation</li>
+            <li><strong>Daily Sales</strong> — Table of today's transactions with sale ID, total amount, items count, time</li>
+            <li><strong>Stock Check</strong> — Product listing with current stock levels, search/filter</li>
+        </ul>
+
+        <h3>7.3 Visual Outputs</h3>
+        <table>
+            <thead><tr><th>Output Type</th><th>Usage</th></tr></thead>
+            <tbody>
+                <tr><td>Bar Charts</td><td>Revenue comparison, top-selling products, cashier performance</td></tr>
+                <tr><td>Line Charts</td><td>Revenue trends over days/weeks/months, sales flow</td></tr>
+                <tr><td>Area Charts</td><td>Sales volume trends with filled visualization</td></tr>
+                <tr><td>Pie Charts</td><td>Product category distribution, revenue share</td></tr>
+                <tr><td>KPI Counters</td><td>Total revenue, total products, total cashiers, total shops</td></tr>
+                <tr><td>Tables</td><td>Product listings, sales records, cashier lists, activity logs</td></tr>
+                <tr><td>Image Grids</td><td>Product catalogue with Cloudinary-hosted images</td></tr>
+                <tr><td>Status Badges</td><td>Active/Inactive indicators for shops and cashiers</td></tr>
+            </tbody>
+        </table>
+
+        <h3>7.4 Principles Followed</h3>
+        <ul>
+            <li><strong>Simplicity and clarity</strong> — Clean, uncluttered interface with clear visual hierarchy</li>
+            <li><strong>Consistency across modules</strong> — Uniform styling, layout patterns, and interaction paradigms</li>
+            <li><strong>Immediate user feedback</strong> — Loading states, success/error toasts, form validation messages</li>
+            <li><strong>Responsive design</strong> — Optimized for mobile, tablet, and desktop</li>
+            <li><strong>Secure display of data</strong> — Role-based access ensures users see only permitted data</li>
+            <li><strong>Performance optimization</strong> — Paginated data loading, lazy rendering, compressed responses</li>
+        </ul>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 8: DATABASE DESIGN -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 8 — Database Design</h2>
+
+        <p>ShopNest uses <strong>MySQL</strong> as its relational database management system, hosted on <strong>AWS RDS</strong> and accessed via the <code>mysql2</code> driver with connection pooling for efficient and reliable data access. The database is designed with a multi-tenant architecture where all data is isolated at the <strong>shop level</strong>, ensuring complete privacy and operational independence for each store.</p>
+
+        <h3>8.1 Database Tables</h3>
+        <table>
+            <thead><tr><th>Table Name</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>owners</code></td><td>Stores shop owner accounts (name, email, hashed password)</td></tr>
+                <tr><td><code>shops</code></td><td>Stores shop/branch details (name, category, address, logo, active status)</td></tr>
+                <tr><td><code>user_shop_selections</code></td><td>Tracks the currently active shop for each owner</td></tr>
+                <tr><td><code>categories</code></td><td>Stores product categories per shop</td></tr>
+                <tr><td><code>cashiers</code></td><td>Stores cashier accounts (name, username, hashed password, active status)</td></tr>
+                <tr><td><code>products</code></td><td>Stores product details (name, SKU, price, cost price, stock, image, category)</td></tr>
+                <tr><td><code>sales</code></td><td>Stores sales transaction headers (shop, cashier, total, tendered amount, date)</td></tr>
+                <tr><td><code>sale_items</code></td><td>Stores individual line items within each sale (product, quantity, unit price, subtotal)</td></tr>
+                <tr><td><code>activity_logs</code></td><td>Stores audit trail of inventory actions (user, action type, entity, details)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>8.2 Table Schema Design</h3>
+
+        <h4>Owners Table (<code>owners</code>)</h4>
+        <pre>CREATE TABLE owners (
+    owner_id      INT AUTO_INCREMENT PRIMARY KEY,
+    full_name     VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</pre>
+
+        <h4>Shops Table (<code>shops</code>)</h4>
+        <pre>CREATE TABLE shops (
+    shop_id    INT AUTO_INCREMENT PRIMARY KEY,
+    owner_id   INT NOT NULL,
+    shop_name  VARCHAR(150) NOT NULL,
+    category   VARCHAR(100),
+    address    TEXT,
+    is_active  BOOLEAN NOT NULL DEFAULT TRUE,
+    logo_url   VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (owner_id) REFERENCES owners(owner_id) ON DELETE CASCADE
+);</pre>
+
+        <h4>User Shop Selections Table (<code>user_shop_selections</code>)</h4>
+        <pre>CREATE TABLE user_shop_selections (
+    user_id        INT PRIMARY KEY,
+    active_shop_id INT,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES owners(owner_id) ON DELETE CASCADE,
+    FOREIGN KEY (active_shop_id) REFERENCES shops(shop_id) ON DELETE SET NULL
+);</pre>
+
+        <h4>Categories Table (<code>categories</code>)</h4>
+        <pre>CREATE TABLE categories (
+    category_id   INT AUTO_INCREMENT PRIMARY KEY,
+    shop_id       INT NOT NULL,
+    category_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);</pre>
+
+        <h4>Cashiers Table (<code>cashiers</code>)</h4>
+        <pre>CREATE TABLE cashiers (
+    cashier_id    INT AUTO_INCREMENT PRIMARY KEY,
+    shop_id       INT NOT NULL,
+    full_name     VARCHAR(100) NOT NULL,
+    username      VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active     BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);</pre>
+
+        <h4>Products Table (<code>products</code>)</h4>
+        <pre>CREATE TABLE products (
+    product_id     INT AUTO_INCREMENT PRIMARY KEY,
+    shop_id        INT NOT NULL,
+    product_name   VARCHAR(150) NOT NULL,
+    image_url      VARCHAR(255),
+    sku            VARCHAR(50),
+    price          DECIMAL(10, 2) NOT NULL,
+    cost_price     DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    stock_quantity INT DEFAULT 0,
+    description    TEXT DEFAULT NULL,
+    category       VARCHAR(100) DEFAULT NULL,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);</pre>
+
+        <h4>Sales Table (<code>sales</code>)</h4>
+        <pre>CREATE TABLE sales (
+    sale_id         INT AUTO_INCREMENT PRIMARY KEY,
+    shop_id         INT NOT NULL,
+    cashier_id      INT NOT NULL,
+    total_amount    DECIMAL(10, 2) NOT NULL,
+    tendered_amount DECIMAL(10, 2),
+    sale_date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE,
+    FOREIGN KEY (cashier_id) REFERENCES cashiers(cashier_id) ON DELETE RESTRICT
+);</pre>
+
+        <h4>Sale Items Table (<code>sale_items</code>)</h4>
+        <pre>CREATE TABLE sale_items (
+    sale_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    sale_id      INT NOT NULL,
+    product_id   INT NOT NULL,
+    quantity     INT NOT NULL,
+    unit_price   DECIMAL(10, 2) NOT NULL,
+    subtotal     DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (sale_id) REFERENCES sales(sale_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE RESTRICT
+);</pre>
+
+        <h4>Activity Logs Table (<code>activity_logs</code>)</h4>
+        <pre>CREATE TABLE activity_logs (
+    log_id      INT AUTO_INCREMENT PRIMARY KEY,
+    shop_id     INT NOT NULL,
+    user_id     INT NOT NULL,
+    user_type   ENUM('owner','cashier') NOT NULL,
+    action      ENUM('product_created','product_updated','product_deleted',
+                     'stock_adjusted','image_uploaded') NOT NULL,
+    entity_type VARCHAR(50) NOT NULL DEFAULT 'product',
+    entity_id   INT DEFAULT NULL,
+    entity_name VARCHAR(150) DEFAULT NULL,
+    details     JSON DEFAULT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_activity_shop_date (shop_id, created_at DESC),
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+);</pre>
+
+        <h3>8.3 Entity Relationship Diagram (ER Diagram)</h3>
+
+        <div class="er-diagram-container">
+            <p style="text-align:center; font-weight:700; font-size:13pt; margin-bottom:15px; color:var(--color-accent);">ShopNest ER Diagram — Table Relationships</p>
+
+            <table style="width:100%; border:none; margin:0;">
+                <tr style="background:none;">
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">OWNERS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> owner_id INT<br>
+                                full_name VARCHAR(100)<br>
+                                email VARCHAR(150) UK<br>
+                                password_hash VARCHAR(255)<br>
+                                created_at TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">SHOPS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> shop_id INT<br>
+                                <span class="fk">FK</span> owner_id INT<br>
+                                shop_name VARCHAR(150)<br>
+                                category VARCHAR(100)<br>
+                                address TEXT<br>
+                                is_active BOOLEAN<br>
+                                logo_url VARCHAR(255)<br>
+                                created_at TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">PRODUCTS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> product_id INT<br>
+                                <span class="fk">FK</span> shop_id INT<br>
+                                product_name VARCHAR(150)<br>
+                                image_url VARCHAR(255)<br>
+                                sku VARCHAR(50)<br>
+                                price DECIMAL(10,2)<br>
+                                cost_price DECIMAL(10,2)<br>
+                                stock_quantity INT<br>
+                                description TEXT<br>
+                                category VARCHAR(100)<br>
+                                created_at TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="background:none;">
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">CASHIERS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> cashier_id INT<br>
+                                <span class="fk">FK</span> shop_id INT<br>
+                                full_name VARCHAR(100)<br>
+                                username VARCHAR(50) UK<br>
+                                password_hash VARCHAR(255)<br>
+                                is_active BOOLEAN
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">SALES</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> sale_id INT<br>
+                                <span class="fk">FK</span> shop_id INT<br>
+                                <span class="fk">FK</span> cashier_id INT<br>
+                                total_amount DECIMAL(10,2)<br>
+                                tendered_amount DECIMAL(10,2)<br>
+                                sale_date TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">SALE_ITEMS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> sale_item_id INT<br>
+                                <span class="fk">FK</span> sale_id INT<br>
+                                <span class="fk">FK</span> product_id INT<br>
+                                quantity INT<br>
+                                unit_price DECIMAL(10,2)<br>
+                                subtotal DECIMAL(10,2)
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="background:none;">
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">CATEGORIES</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> category_id INT<br>
+                                <span class="fk">FK</span> shop_id INT<br>
+                                category_name VARCHAR(100)
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">ACTIVITY_LOGS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK</span> log_id INT<br>
+                                <span class="fk">FK</span> shop_id INT<br>
+                                user_id INT<br>
+                                user_type ENUM<br>
+                                action ENUM<br>
+                                entity_type VARCHAR(50)<br>
+                                entity_id INT<br>
+                                entity_name VARCHAR(150)<br>
+                                details JSON<br>
+                                created_at TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                    <td style="border:none; vertical-align:top; padding:5px;">
+                        <div class="er-table">
+                            <div class="er-table-header">USER_SHOP_SELECTIONS</div>
+                            <div class="er-table-body">
+                                <span class="pk">PK/FK</span> user_id INT<br>
+                                <span class="fk">FK</span> active_shop_id INT<br>
+                                updated_at TIMESTAMP
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <p style="text-align:center; margin-top:15px; font-size:10pt; color:#555;">
+                <strong>Relationships:</strong>
+                OWNERS →(1:N)→ SHOPS |
+                SHOPS →(1:N)→ PRODUCTS |
+                SHOPS →(1:N)→ CASHIERS |
+                SHOPS →(1:N)→ CATEGORIES |
+                SHOPS →(1:N)→ SALES |
+                CASHIERS →(1:N)→ SALES |
+                SALES →(1:N)→ SALE_ITEMS |
+                PRODUCTS →(1:N)→ SALE_ITEMS |
+                SHOPS →(1:N)→ ACTIVITY_LOGS |
+                OWNERS →(1:1)→ USER_SHOP_SELECTIONS
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 9: ADVANTAGES -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 9 — Advantages of the Proposed System</h2>
+
+        <p>The proposed ShopNest Multi-Tenant POS System offers several significant advantages over traditional manual processes or outdated billing systems. By leveraging React.js, Express.js, Node.js, and MySQL with modern design principles, the system provides a fast, efficient, and user-friendly experience for Shop Owners and Cashiers.</p>
+
+        <h3>9.1 Key Advantages</h3>
+
+        <p><strong>1. Automation of Sales Processing</strong><br>Manual billing and calculation are eliminated. Cashiers can quickly search products, add them to a cart, and process checkout with automatic total calculation and change computation.</p>
+
+        <p><strong>2. Centralized Multi-Store Management</strong><br>All shop, product, cashier, sales, and inventory data is stored in one centralized MySQL database on AWS RDS. Owners with multiple branches can manage everything from a single dashboard.</p>
+
+        <p><strong>3. Real-Time Inventory Tracking</strong><br>Stock levels are automatically updated after every sale. Low stock alerts proactively notify owners about products that need restocking, preventing stockouts.</p>
+
+        <p><strong>4. Improved Accuracy</strong><br>Manual errors in billing and inventory are drastically reduced through automated calculations, form validation, and database-enforced constraints.</p>
+
+        <p><strong>5. Visual Business Analytics</strong><br>Interactive bar charts, line charts, area charts, and pie charts provide visual representation of revenue trends, top-selling products, cashier performance, and inventory distribution — enabling data-driven business decisions.</p>
+
+        <p><strong>6. Role-Based Access Control</strong><br>Different user roles (Owner, Cashier) ensure that users see only relevant data and can perform only permitted actions. Owners cannot be impersonated, and cashiers cannot access administrative functions.</p>
+
+        <p><strong>7. Enterprise-Grade Security</strong><br>Passwords are hashed using bcrypt; access is protected with JWT-based authentication; API endpoints are secured with Helmet, CORS, and rate limiting; all inputs are validated with Joi and Express Validator.</p>
+
+        <p><strong>8. Multi-Tenant Data Isolation</strong><br>Each shop's data is completely isolated. An owner's shops, products, cashiers, and sales cannot be accessed by other owners, ensuring complete privacy.</p>
+
+        <p><strong>9. Scalability</strong><br>Built with a modular architecture, the system can easily scale to handle a growing number of shops, products, cashiers, and daily transactions.</p>
+
+        <p><strong>10. User-Friendly Interface</strong><br>Responsive UI with React.js and Tailwind CSS provides a smooth, modern experience across desktops, tablets, and mobile devices. The POS terminal is designed for speed and ease of use.</p>
+
+        <p><strong>11. Bulk Operations</strong><br>The Excel (XLSX) bulk upload feature allows owners to import entire product catalogues in seconds, dramatically reducing the time needed to set up a new store.</p>
+
+        <p><strong>12. Cloud-Based Media Management</strong><br>Product images are hosted on Cloudinary CDN, ensuring fast loading, automatic optimization, and reliable delivery without burdening the application server.</p>
+
+        <p><strong>13. Audit Trail &amp; Accountability</strong><br>Activity logs track all inventory-related actions with timestamps, user identification, and action details — providing complete accountability and audit capability.</p>
+
+        <p><strong>14. Digital Receipt Distribution</strong><br>Integration with EmailJS enables automated dispatch of digital sales receipts to customers, reducing paper usage and improving customer experience.</p>
+
+        <p><strong>15. Future-Proof Architecture</strong><br>The system is designed with modularity and extensibility in mind, allowing easy addition of features such as barcode scanning, receipt printing, customer loyalty programs, and advanced analytics.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 10: FUTURE SCOPE -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 10 — Future Scope of the Project</h2>
+
+        <p>The current version of ShopNest successfully fulfills the core requirements for a multi-tenant POS system — managing sales, inventory, cashiers, and financial analytics. However, there is significant scope for further enhancement and expansion of the system's features in future versions.</p>
+
+        <h3>10.1 Possible Future Enhancements</h3>
+
+        <p><strong>1. Barcode &amp; QR Code Scanning</strong><br>Integration with barcode scanners for instant product lookup during checkout, and QR code generation for product labels.</p>
+
+        <p><strong>2. Receipt Printing</strong><br>Direct integration with thermal receipt printers for physical receipt generation at the point of sale.</p>
+
+        <p><strong>3. Customer Management &amp; Loyalty Programs</strong><br>Adding a customer database to track purchase history, offer loyalty points, and run targeted promotions.</p>
+
+        <p><strong>4. SMS &amp; Push Notifications</strong><br>Automatic notifications to owners for low stock alerts, daily sales summaries, and important system events.</p>
+
+        <p><strong>5. Supplier &amp; Purchase Order Management</strong><br>A module for managing suppliers, creating purchase orders, and tracking incoming inventory shipments.</p>
+
+        <p><strong>6. Expense Tracking</strong><br>Adding an expense management module for tracking operational costs (rent, utilities, salaries) alongside revenue.</p>
+
+        <p><strong>7. Multi-Currency &amp; Tax Support</strong><br>Support for multiple currencies and configurable tax rates (GST, VAT) for businesses operating in different regions.</p>
+
+        <p><strong>8. Offline POS Mode</strong><br>Progressive Web App (PWA) capabilities to allow the POS terminal to function during internet outages, syncing transactions when connectivity is restored.</p>
+
+        <p><strong>9. Mobile Application</strong><br>Developing a dedicated mobile app (React Native) for owners to monitor business performance on-the-go with push notifications.</p>
+
+        <p><strong>10. Advanced Analytics &amp; AI</strong><br>AI-based analytics for demand forecasting, identifying sales patterns, recommending optimal pricing, and predicting inventory needs.</p>
+
+        <p><strong>11. Exportable Reports</strong><br>Ability to export financial reports, inventory lists, and sales data as PDF or Excel files for accounting and official use.</p>
+
+        <p><strong>12. Multi-User Roles</strong><br>Expanding the role system to include Manager, Accountant, and other roles with granular permission controls.</p>
+
+        <p><strong>13. API Integration (Third-Party)</strong><br>Integration with accounting software (Tally, QuickBooks), payment gateways (Razorpay, Stripe), and e-commerce platforms.</p>
+
+        <p><strong>14. Customer-Facing Display</strong><br>A secondary display interface showing the customer their items and total during checkout.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 11: OUTPUT SCREENS -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 11 — Output Screens</h2>
+
+        <h3>11.1 Public Screens</h3>
+
+        <p><strong>1. Public Landing Page</strong><br>Premium landing page with animated hero section, feature showcases, pricing plans, testimonials, and call-to-action buttons for registration.</p>
+
+        <p><strong>2. Login Screen</strong><br>Clean login form supporting both Owner and Cashier authentication with role-based redirection.</p>
+
+        <p><strong>3. Registration Screen</strong><br>Owner registration form with name, email, and password fields with validation.</p>
+
+        <h3>11.2 Owner Screens</h3>
+
+        <p><strong>1. Owner Dashboard Screen</strong><br>Interactive dashboard displaying revenue KPIs, total products, total cashiers, total shops, revenue trend charts (line), top-selling products (bar chart), and recent transactions list.</p>
+
+        <p><strong>2. Shop Management Screen</strong><br>List of all shops with details (name, category, address, logo, status), with options to create, edit, and delete shops.</p>
+
+        <p><strong>3. Inventory Management Screen</strong><br>Comprehensive product table with images, names, SKU, prices, cost prices, stock quantities, and categories. Includes search, filter, add product, edit product, and bulk upload features.</p>
+
+        <p><strong>4. Add/Edit Product Form Screen</strong><br>Detailed product form with fields for name, SKU, selling price, cost price, stock quantity, description, category dropdown, and image upload with preview.</p>
+
+        <p><strong>5. Cashier Management Screen</strong><br>List of cashiers assigned to the active shop, with name, username, active status toggle, and options to add, edit, or delete cashiers.</p>
+
+        <p><strong>6. Financial Reports Screen</strong><br>Multi-section reports page with sales analytics charts, revenue trends, cashier performance metrics, top products analysis, and inventory valuation summary.</p>
+
+        <p><strong>7. Activity Log Screen</strong><br>Chronological activity feed showing inventory actions (product created, updated, deleted, stock adjusted, image uploaded) with user details and timestamps.</p>
+
+        <h3>11.3 Cashier Screens</h3>
+
+        <p><strong>1. POS Terminal Screen</strong><br>Full-screen POS interface with product search/browse area, product cards with images and prices, shopping cart sidebar with quantity controls, and checkout panel with tendered amount input and change display.</p>
+
+        <p><strong>2. Daily Sales Screen</strong><br>Table of all transactions processed by the cashier today, showing sale ID, total amount, number of items, tendered amount, and timestamp.</p>
+
+        <p><strong>3. Stock Check Screen</strong><br>Searchable product inventory viewer showing current stock levels, prices, and product details for quick availability checks.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHAPTER 12: CONCLUSION -->
+    <!-- ============================================ -->
+    <div class="content-section page-break">
+        <h2>Chapter 12 — Conclusion</h2>
+
+        <p>The <strong>ShopNest — Multi-Tenant Point of Sale (POS) System</strong> developed using <strong>React.js, Vite, Express.js, Node.js, and MySQL</strong> successfully achieves its goal of providing a comprehensive, efficient, and user-friendly solution for managing retail sales operations, product inventories, cashier staff, and financial analytics across multiple stores.</p>
+
+        <p>The system offers significant advantages over traditional manual billing and inventory methods by:</p>
+
+        <ul>
+            <li><strong>Automating the entire sales process</strong> with a fast, intuitive POS terminal</li>
+            <li><strong>Providing real-time inventory tracking</strong> with automatic stock updates after every transaction</li>
+            <li><strong>Offering interactive visual dashboards</strong> with bar charts, line charts, and KPI counters for data-driven business decisions</li>
+            <li><strong>Enabling multi-store management</strong> from a single owner account with complete data isolation</li>
+            <li><strong>Implementing enterprise-grade security</strong> with JWT authentication, bcrypt hashing, Helmet, CORS, and rate limiting</li>
+            <li><strong>Supporting bulk operations</strong> through Excel import for rapid product catalogue setup</li>
+            <li><strong>Delivering cloud-based media management</strong> through Cloudinary integration for optimized product images</li>
+            <li><strong>Maintaining complete audit trails</strong> through activity logging for accountability</li>
+            <li><strong>Reducing paperwork and administrative effort</strong> through digital processes and automated reports</li>
+            <li><strong>Providing role-based access control</strong> for Owners and Cashiers with distinct dashboards and permissions</li>
+        </ul>
+
+        <p>The application is <strong>secure, responsive, and scalable</strong>, built on a modern technology stack that is capable of handling growing numbers of shops, products, cashiers, and daily transactions. Both the frontend and backend are deployed on <strong>Vercel</strong>, with the MySQL database hosted on <strong>AWS RDS</strong>, ensuring high availability and reliability.</p>
+
+        <p>Moreover, the system is built with <strong>flexibility and extensibility</strong> to support future enhancements such as barcode scanning, receipt printing, customer loyalty programs, mobile applications, offline POS mode, and AI-powered analytics.</p>
+
+        <p>In conclusion, the <strong>ShopNest POS System</strong> provides a modern, effective, and production-ready tool for retail businesses to streamline their operations, improve revenue visibility, and enhance customer experience. It serves as a strong foundation for further development in the retail technology space.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================ -->
+    <div class="report-footer">
+        <p><strong>Project Repository:</strong> github.com/rumman2004/ShopNest</p>
+        <p><strong>Technology Stack:</strong> React 19 • Vite 7 • Tailwind CSS 4 • Express.js • Node.js • MySQL • AWS RDS • Cloudinary • JWT • Recharts</p>
+        <p><strong>Developed by:</strong> Rumman Ahmed | BCA 6th Semester Major Project | Session 2022–25 | Sibsagar Commerce College</p>
+    </div>
+
+</body>
+</html>
