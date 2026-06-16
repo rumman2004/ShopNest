@@ -27,22 +27,26 @@ Session: (2022–25)
 
 ## CERTIFICATE OF ACCEPTANCE
 
-This is to certify that **Rumman Ahmed** of Sibsagar Commerce College has successfully completed the project entitled **"ShopNest — Multi-Tenant Point of Sale (POS) System"** under the supervision of Mr. Panchanan Saikia, during the period from _______________ to _______________.
+This is to certify that **Rumman Ahmed** of Sibsagar Commerce College has successfully completed the project entitled **"ShopNest — A Multi-Tenant Point of Sale (POS) System"** under the supervision of **Mr. Panchanan Saikia**, during the period from **April 1st to June 5th**.
 
-The project work has been carried out in partial fulfilment of the requirements for the award of the degree of Bachelor of Computer Applications, and is hereby accepted by Sibsagar Commerce College.
+The project work has been carried out in partial fulfillment of the requirements for the award of the degree of **Bachelor of Computer Applications**, and is hereby accepted by the Department of Computer Applications, **Sibsagar Commerce College**.
 
 ---
 
-___________________________________
-**Signature of Supervisor**
-Name: Mr. Panchanan Saikia
-Date: _______________
+Signature of Supervisor
 
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Name: Mr. Panchanan Saikia
+
+Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+---
 ---
 
 ## CERTIFICATE FROM THE GUIDE
 
-This is to certify that the project entitled **"ShopNest — Multi-Tenant Point of Sale (POS) System"**, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, is submitted in partial fulfilment of the requirements for the 6th Semester of the Bachelor of Computer Application (BCA) program.
+This is to certify that the project entitled **"ShopNest — A Multi-Tenant Point of Sale (POS) System"**, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, is submitted in partial fulfillment of the requirements for the **6th Semester** of the **Bachelor of Computer Application (BCA)** program.
 
 The project work has been carried out by the following student:
 
@@ -52,22 +56,47 @@ This work is a result of his sincere efforts and has been completed under my sup
 
 ---
 
-___________________________________
-**Signature of the Guide**
-Mr. Panchanan Saikia
-Date: _______________
+Signature of the Guide
 
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Mr. Panchanan Saikia
+
+Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+---
 ---
 
 ## CERTIFICATE FROM THE EXAMINER
 
-This is to certify that the project report entitled **"ShopNest — Multi-Tenant Point of Sale (POS) System"**, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, in partial fulfilment of the requirements for the 6th Semester of the Bachelor of Computer Application (BCA) program, has been evaluated by us on _______________.
+This is to certify that the project report entitled **"ShopNest — A Multi-Tenant Point of Sale (POS) System"**, submitted to the Department of Computer Application, Sibsagar Commerce College, Sibsagar, in partial fulfillment of the requirements for the **6th Semester** of the **Bachelor of Computer Application (BCA)** program, has been evaluated by us on \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_.
 
 ---
 
-___________________________________
-**Signature of the Examiner**
-Name(s): _______________
+Signature of the Examiner
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Name(s): \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+---
+---
+
+## ACKNOWLEDGEMENT
+
+I would like to express my sincere gratitude to my project guide, **Mr. Panchanan Saikia**, Assistant Professor, Department of Computer Application, Sibsagar Commerce College, for his invaluable guidance, continuous encouragement, and constructive suggestions throughout the course of this project.
+
+I am also thankful to the **Head of the Department** and all faculty members of the Department of Computer Application for their support and cooperation during the development of this project.
+
+I would also like to thank my family and friends for their moral support and motivation that helped me complete this project successfully.
+
+Finally, I express my gratitude to **Dibrugarh University** for providing the platform and curriculum that enabled this academic endeavor.
+
+---
+
+**Rumman Ahmed**
+BCA 6th Semester
+Sibsagar Commerce College, Sibsagar
 
 ---
 
