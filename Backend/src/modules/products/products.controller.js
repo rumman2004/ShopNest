@@ -1,4 +1,4 @@
-const productsService  = require('./products.service');
+const productsService = require('./products.service');
 const { asyncHandler } = require('../../utils/asyncHandler');
 
 // GET /shops/:shop_id/products

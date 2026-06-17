@@ -50,15 +50,21 @@ export default function ManageCashiers() {
     }
   }
 
-  const handleDeactivate = async () => {
+  const handleToggleStatus = async () => {
     if (!confirm.cashier || !shopId) return
+    const isActive = confirm.cashier.is_active
     setSaving(true)
     try {
-      await cashierService.deactivate(confirm.cashier.cashier_id)
-      toast.success('Cashier deactivated successfully.')
+      if (isActive) {
+        await cashierService.deactivate(confirm.cashier.cashier_id)
+        toast.success('Cashier deactivated successfully.')
+      } else {
+        await cashierService.reactivate(confirm.cashier.cashier_id)
+        toast.success('Cashier reactivated successfully.')
+      }
       await refetch()
     } catch (err) {
-      toast.error(err?.message || 'Failed to deactivate cashier.')
+      toast.error(err?.message || `Failed to ${isActive ? 'deactivate' : 'reactivate'} cashier.`)
     } finally {
       setSaving(false)
       setConfirm({ open: false, cashier: null })
@@ -132,9 +138,12 @@ export default function ManageCashiers() {
       <ConfirmDialog
         isOpen={confirm.open}
         onClose={() => setConfirm({ open: false, cashier: null })}
-        onConfirm={handleDeactivate}
-        title="Deactivate Cashier?"
-        message={`Are you sure you want to deactivate "${confirm.cashier?.full_name}"? They will no longer be able to log into the POS system.`}
+        onConfirm={handleToggleStatus}
+        title={confirm.cashier?.is_active ? 'Deactivate Cashier?' : 'Reactivate Cashier?'}
+        message={confirm.cashier?.is_active
+          ? `Are you sure you want to deactivate "${confirm.cashier?.full_name}"? They will no longer be able to log into the POS system.`
+          : `Are you sure you want to reactivate "${confirm.cashier?.full_name}"? They will be able to log into the POS system again.`
+        }
         loading={saving}
       />
     </div>

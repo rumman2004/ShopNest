@@ -72,7 +72,7 @@ const getProductsByShop = async (data) => {
   // ✅ Force every numeric param to an actual JS number
   const parsedShopId = toInt(shop_id);
   const parsedPage   = toInt(page, 1);
-  const parsedLimit  = Math.max(1, toInt(limit, 50)); // Ensure limit is at least 1
+  const parsedLimit  = Math.max(1, toInt(limit, 200)); // Ensure limit is at least 1
   const offset       = Math.max(0, (parsedPage - 1) * parsedLimit);
 
   let whereClause = 'WHERE shop_id = ?';

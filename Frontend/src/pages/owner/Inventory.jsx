@@ -1,41 +1,49 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useShop }      from '../../hooks/useShop'
-import { useFetch }     from '../../hooks/useFetch'
-import { useToast }     from '../../hooks/useToast'
-import { useDebounce }  from '../../hooks/useDebounce'
-import productService   from '../../services/productService'
-import ProductList      from '../../features/products/ProductList'
-import ProductForm      from '../../features/products/ProductForm'
-import ImageUploader    from '../../features/products/ImageUploader'
-import Modal            from '../../components/ui/Modal'
-import Button           from '../../components/ui/Button'
-import SearchBar        from '../../components/ui/SearchBar'
-import ConfirmDialog    from '../../components/ui/ConfirmDialog'
-import EmptyState       from '../../components/ui/EmptyState'
-import { ImagePlus, Plus, Store, Package }  from 'lucide-react'
+import { useShop } from '../../hooks/useShop'
+import { useFetch } from '../../hooks/useFetch'
+import { useToast } from '../../hooks/useToast'
+import { useDebounce } from '../../hooks/useDebounce'
+import productService from '../../services/productService'
+import ProductList from '../../features/products/ProductList'
+import ProductForm from '../../features/products/ProductForm'
+import ImageUploader from '../../features/products/ImageUploader'
+import Modal from '../../components/ui/Modal'
+import Button from '../../components/ui/Button'
+import SearchBar from '../../components/ui/SearchBar'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
+import EmptyState from '../../components/ui/EmptyState'
+import Pagination from '../../components/ui/Pagination'
+import { ImagePlus, Plus, Store, Package } from 'lucide-react'
 
 export default function Inventory() {
   const { activeShop, shopId, setActiveShop } = useShop()
-  const { toast }                             = useToast()
+  const { toast } = useToast()
 
-  const [search,   setSearch]   = useState('')
-  const [modal,    setModal]    = useState({ open: false, product: null })
+  const [search, setSearch] = useState('')
+  const [modal, setModal] = useState({ open: false, product: null })
   const [imgModal, setImgModal] = useState({ open: false, product: null })
-  const [confirm,  setConfirm]  = useState({ open: false, product: null })
-  const [saving,   setSaving]   = useState(false)
+  const [confirm, setConfirm] = useState({ open: false, product: null })
+  const [saving, setSaving] = useState(false)
   const dSearch = useDebounce(search, 350)
+
+  const [page, setPage] = useState(1)
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setPage(1)
+  }, [dSearch])
 
   // ── Fetch products ─────────────────────────────────────────────────
   const {
-    data:  productData,
+    data: productData,
     loading,
     error: productError,
     refetch,
   } = useFetch(
     () => shopId
-      ? productService.getAll(shopId, { search: dSearch })
+      ? productService.getAll(shopId, { search: dSearch, page, limit: 50 })
       : Promise.resolve(null),
-    [shopId, dSearch]
+    [shopId, dSearch, page]
   )
 
   // ── Fetch categories ──────────────────────────────────────────────
@@ -62,12 +70,14 @@ export default function Inventory() {
 
   // ── Unwrap backend response ───────────────────────────────────────
   const products = productData?.data?.products ?? productData?.data ?? []
+  const pagination = productData?.data?.pagination
+  const totalItems = pagination?.totalItems ?? products.length
 
   const shopLabel = activeShop?.shop_name ?? `Shop #${shopId}`
 
   // ── Modal helpers ──────────────────────────────────────────────────
-  const openCreate = ()  => setModal({ open: true,  product: null })
-  const closeModal = ()  => setModal({ open: false, product: null })
+  const openCreate = () => setModal({ open: true, product: null })
+  const closeModal = () => setModal({ open: false, product: null })
 
   const openEdit = useCallback(
     (product) => setModal({ open: true, product }),
@@ -155,10 +165,10 @@ export default function Inventory() {
           <div className="flex items-center gap-2 mt-2 text-[#697773] text-sm sm:text-base font-medium">
             <span className="text-[#182321] drop-shadow-sm">{shopLabel}</span>
             <span className="text-[#004643] opacity-60">•</span>
-            <span>{products.length} product{products.length !== 1 ? 's' : ''} total</span>
+            <span>{totalItems} product{totalItems !== 1 ? 's' : ''} total</span>
           </div>
         </div>
-        
+
         {/* Actions Container */}
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto">
           <div className="w-full sm:w-72">
@@ -169,10 +179,10 @@ export default function Inventory() {
               className="w-full"
             />
           </div>
-          <Button 
-            variant="gradient" 
+          <Button
+            variant="gradient"
             size="md"
-            icon={<Plus size={18} strokeWidth={2.5} />} 
+            icon={<Plus size={18} strokeWidth={2.5} />}
             onClick={openCreate}
             className="shadow-md shrink-0 w-full sm:w-auto"
           >
@@ -190,6 +200,18 @@ export default function Inventory() {
         onDelete={(p) => setConfirm({ open: true, product: p })}
         onUploadImage={openImgModal}
       />
+
+      {/* --- Pagination --- */}
+      {!loading && products.length > 0 && totalItems > 50 && (
+        <div className="pt-4 border-t border-[#d9d4c8]/60 mt-6">
+          <Pagination
+            page={page}
+            total={totalItems}
+            limit={50}
+            onChange={setPage}
+          />
+        </div>
+      )}
 
       {/* --- Modals --- */}
       <Modal
