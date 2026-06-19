@@ -1105,3 +1105,25 @@ In conclusion, the **ShopNest POS System** provides a modern, effective, and pro
 > **Technology Stack:** React 19 • Vite 7 • Tailwind CSS 4 • Express.js • Node.js • MySQL • Cloudinary • JWT • Recharts
 >
 > **Developed by:** Rumman Ahmed | BCA 6th Semester Major Project | Session 2022–25
+
+---
+
+## Chapter 13 — References
+
+### Technology Reference
+
+- **React 19:** [https://react.dev/](https://react.dev/)
+- **Vite 7:** [https://vite.dev/](https://vite.dev/)
+- **Tailwind CSS 4.1:** [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
+- **Express.js:** [https://expressjs.com/](https://expressjs.com/)
+- **Node.js:** [https://nodejs.org/en/docs/](https://nodejs.org/en/docs/)
+- **MySQL:** [https://dev.mysql.com/doc/](https://dev.mysql.com/doc/)
+- **Cloudinary:** [https://cloudinary.com/documentation](https://cloudinary.com/documentation)
+- **JWT:** [https://jwt.io/](https://jwt.io/)
+- **Recharts:** [https://recharts.org/](https://recharts.org/)
+
+### Design Reference
+
+- **Pinterest:** [https://www.pinterest.com/](https://www.pinterest.com/)
+- **Dribbble:** [https://dribbble.com/](https://dribbble.com/)
+- **GitHub:** [https://github.com/](https://github.com/)
