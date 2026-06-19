@@ -3,7 +3,10 @@ CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     shop_id INT NOT NULL,
     category_name VARCHAR(100) NOT NULL,
-    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_shop_category (shop_id, category_name)
 );
 
 -- Create cashiers (Depends on shops)
@@ -30,5 +33,7 @@ CREATE TABLE products (
     description    TEXT DEFAULT NULL,
     category       VARCHAR(100) DEFAULT NULL,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE
+    FOREIGN KEY (shop_id) REFERENCES shops(shop_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_shop_sku (shop_id, sku),
+    INDEX idx_products_category (shop_id, category)
 );
