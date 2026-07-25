@@ -138,6 +138,8 @@ const footerLinks = [
   { label: 'Support', path: '/support' }
 ]
 
+const DESKTOP_DOWNLOAD_URL = 'https://github.com/rumman2004/ShopNest-Desktop/releases'
+
 /* ─── Scroll Progress Bar ───────────────────────────────────────── */
 const ScrollProgressBar = memo(function ScrollProgressBar() {
   const [progress, setProgress] = useState(0)
@@ -185,6 +187,66 @@ const NavDot = memo(function NavDot({ label, target }) {
       </span>
       <span className="w-2 h-2 rounded-full bg-[#004643]/40 hover:bg-[#004643]/15 group-hover:scale-125 transition-all duration-200 border border-[#004643]/35" />
     </button>
+  )
+})
+
+const DownloadAppButton = memo(function DownloadAppButton({ compact = false, className = '' }) {
+  return (
+    <a
+      href={DESKTOP_DOWNLOAD_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`
+        group relative isolate items-center justify-center overflow-hidden
+        bg-gradient-to-br from-[#182321] via-[#004643] to-[#0f766e]
+        text-white border border-white/15 shadow-lg shadow-[#004643]/20
+        transition-all duration-300 ease-out
+        hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#004643]/25
+        active:translate-y-0 active:scale-[0.98]
+        focus-visible:ring-2 focus-visible:ring-[#004643] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0EDE5] focus-visible:outline-none
+        ${compact
+          ? 'hidden sm:inline-flex h-10 gap-2.5 rounded-xl px-3.5'
+          : 'inline-flex min-h-[64px] w-full gap-3 rounded-2xl px-4 py-3 text-left sm:w-auto sm:px-5'
+        }
+        ${className}
+      `}
+    >
+      <span className="absolute inset-0 rounded-[inherit] bg-[linear-gradient(135deg,rgba(255,255,255,0.20),rgba(255,255,255,0)_42%)] opacity-80" />
+      <span className="absolute -right-8 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-[#e5f2f1]/15 blur-2xl transition-transform duration-500 group-hover:scale-125" />
+
+      <span
+        className={`
+          relative flex shrink-0 items-center justify-center rounded-xl
+          bg-white/12 text-[#e5f2f1] ring-1 ring-white/15 shadow-inner
+          transition-colors duration-300 group-hover:bg-white/18
+          ${compact ? 'h-7 w-7' : 'h-10 w-10'}
+        `}
+      >
+        <Monitor size={compact ? 15 : 20} className="transition-transform duration-300 group-hover:scale-110" />
+        {!compact && (
+          <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-[#e5f2f1] ring-2 ring-[#004643]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#004643]" />
+          </span>
+        )}
+      </span>
+
+      <span className="relative min-w-0">
+        <span className={`block font-bold leading-none ${compact ? 'text-xs' : 'text-base'}`}>
+          {compact ? 'Download App' : 'Download Desktop App'}
+        </span>
+        {!compact && (
+          <span className="mt-1 block text-[11px] font-semibold uppercase tracking-wide text-[#e5f2f1]/85">
+            Windows | macOS | Linux
+          </span>
+        )}
+      </span>
+
+      {!compact && (
+        <span className="relative ml-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[#004643] shadow-sm transition-transform duration-300 group-hover:translate-y-0.5">
+          <Download size={16} />
+        </span>
+      )}
+    </a>
   )
 })
 
@@ -541,13 +603,9 @@ const Navbar = memo(function Navbar({ scrolled }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-2">
-        <a href="https://github.com/rumman2004/ShopNest-Desktop/releases" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="hidden sm:inline-flex items-center gap-1.5 border-[#004643]/30 text-[#004643] hover:bg-[#004643]/10 font-semibold">
-            <Monitor size={14} /> Download App
-          </Button>
-        </a>
-        <Link to="/login">
+      <div className="flex items-center gap-2.5">
+        <DownloadAppButton compact />
+        <Link to="/login" className="hidden sm:block">
           <Button variant="ghost" size="sm">Sign In</Button>
         </Link>
         <Link to="/register">
@@ -647,20 +705,7 @@ export default function LandingPage() {
               Start Free Trial
             </Button>
           </Link>
-          <a
-            href="https://github.com/rumman2004/ShopNest-Desktop/releases"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold
-              bg-[#004643] text-white shadow-xl shadow-[#004643]/25
-              hover:bg-[#0f766e] hover:scale-[1.02] active:scale-[0.98]
-              transition-all duration-200 border border-white/10 w-full sm:w-auto
-            "
-          >
-            <Download size={18} className="animate-bounce" />
-            Download Desktop App (.exe)
-          </a>
+          <DownloadAppButton />
           <button
             onClick={scrollToFeatures}
             className="
@@ -1106,15 +1151,7 @@ export default function LandingPage() {
                   <Link to="/register">
                     <Button variant="gradient" size="xl" iconRight={<ArrowRight size={20} />}>Start Free Trial</Button>
                   </Link>
-                  <a
-                    href="https://github.com/rumman2004/ShopNest-Desktop/releases"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button variant="outline" size="xl" className="w-full sm:w-auto border-[#004643]/40 text-[#004643] hover:bg-[#004643]/10 font-bold flex items-center justify-center gap-2">
-                      <Download size={18} /> Download Desktop App
-                    </Button>
-                  </a>
+                  <DownloadAppButton />
                   <Link to="/login">
                     <Button variant="secondary" size="xl">Sign In Instead</Button>
                   </Link>
