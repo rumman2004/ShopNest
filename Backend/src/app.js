@@ -27,28 +27,12 @@ app.use(helmet({
 }));
 
 // CORS configuration
-const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:1420',
-    'http://localhost:3000',
-    'tauri://localhost',
-    'https://tauri.localhost'
-].filter(Boolean);
-
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: (origin, callback) => callback(null, true), // Automatically accept any desktop/mobile/web origin
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 };
 app.use(cors(corsOptions));
 
