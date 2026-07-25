@@ -5,7 +5,7 @@ import {
   ArrowRight, ChevronDown, Play,
   MousePointer2, Sparkles, TrendingUp, ShoppingCart,
   Package, CreditCard, FileBarChart, ArrowUpRight,
-  Star, Quote,
+  Star, Quote, Download, Monitor,
 } from 'lucide-react'
 import Button          from '../../components/ui/Button'
 import AnimatedSection from '../../components/ui/AnimatedSection'
@@ -542,6 +542,11 @@ const Navbar = memo(function Navbar({ scrolled }) {
       </div>
 
       <div className="flex items-center gap-2">
+        <a href="https://github.com/rumman2004/ShopNest-Desktop/releases" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="sm" className="hidden sm:inline-flex items-center gap-1.5 border-[#004643]/30 text-[#004643] hover:bg-[#004643]/10 font-semibold">
+            <Monitor size={14} /> Download App
+          </Button>
+        </a>
         <Link to="/login">
           <Button variant="ghost" size="sm">Sign In</Button>
         </Link>
@@ -629,7 +634,7 @@ export default function LandingPage() {
         </p>
 
         <div
-          className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up"
+          className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center animate-slide-up"
           style={{ animationDelay: '450ms' }}
         >
           <Link to="/register">
@@ -637,18 +642,32 @@ export default function LandingPage() {
               variant="gradient"
               size="xl"
               iconRight={<ArrowRight size={20} />}
-              className="group border border-[#e5f2f1]/30 shadow-md"
+              className="group border border-[#e5f2f1]/30 shadow-md w-full sm:w-auto"
             >
               Start Free Trial
             </Button>
           </Link>
+          <a
+            href="https://github.com/rumman2004/ShopNest-Desktop/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold
+              bg-[#004643] text-white shadow-xl shadow-[#004643]/25
+              hover:bg-[#0f766e] hover:scale-[1.02] active:scale-[0.98]
+              transition-all duration-200 border border-white/10 w-full sm:w-auto
+            "
+          >
+            <Download size={18} className="animate-bounce" />
+            Download Desktop App (.exe)
+          </a>
           <button
             onClick={scrollToFeatures}
             className="
-              inline-flex items-center gap-2 px-8 py-4 rounded-xl text-base font-medium
+              inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-medium
               glass border border-[#d9d4c8] text-[#182321]
               hover:bg-[#e5f2f1]/80
-              transition-all duration-200
+              transition-all duration-200 w-full sm:w-auto
             "
           >
             <Play size={16} className="text-[#697773]" />
@@ -1083,10 +1102,19 @@ export default function LandingPage() {
                 </p>
               </AnimatedSection>
               <AnimatedSection variant="fade-up" delay={300}>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
                   <Link to="/register">
                     <Button variant="gradient" size="xl" iconRight={<ArrowRight size={20} />}>Start Free Trial</Button>
                   </Link>
+                  <a
+                    href="https://github.com/rumman2004/ShopNest-Desktop/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="xl" className="w-full sm:w-auto border-[#004643]/40 text-[#004643] hover:bg-[#004643]/10 font-bold flex items-center justify-center gap-2">
+                      <Download size={18} /> Download Desktop App
+                    </Button>
+                  </a>
                   <Link to="/login">
                     <Button variant="secondary" size="xl">Sign In Instead</Button>
                   </Link>
